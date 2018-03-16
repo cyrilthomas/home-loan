@@ -77,6 +77,8 @@ class App extends Component {
         <Navbar brand='Home Loan Calculator' />        
 
         <div className="container">
+        
+        <br/>
         <Row>
           <Input s={2} type='select' label="Pick LMI Rate" onChange={this.configChange}>
             <option value=''></option>
