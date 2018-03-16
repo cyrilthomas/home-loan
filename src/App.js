@@ -80,7 +80,7 @@ class App extends Component {
         
         <br/>
         <Row>
-          <Input s={2} type='select' label="Pick LMI Rate" onChange={this.configChange}>
+          <Input s={3} type='select' label="Pick LMI Rate" onChange={this.configChange}>
             <option value=''></option>
             <option value='default'>Default</option>
             <option value='westpac'>Westpac</option>
