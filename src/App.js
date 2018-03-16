@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { 
+  Button, Input, 
+  Row, Dropdown, 
+  NavItem, Navbar, 
+  Col, Table
+} from 'react-materialize';
 import conf from './utils/config';
 import calc from './utils/lmi-calc';
 
@@ -16,7 +20,7 @@ class App extends Component {
   }
 
   configChange(event) {
-    const bank = event.target.value;
+    const bank = event.target.value;;
 
     if (bank) {
       this.setState({ config: conf(bank) });
@@ -70,42 +74,93 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Home Loan Calculator</h1>
-        </header>
+        <Navbar brand='Home Loan Calculator' />        
+
+        <div className="container">
+        <Row>
+          <Input s={2} type='select' label="Pick LMI Rate" onChange={this.configChange}>
+            <option value=''></option>
+            <option value='default'>Default</option>
+            <option value='westpac'>Westpac</option>
+          </Input>
+        </Row>
+      
+        <Row>
+          <Input type="number" onChange={this.priceChange} label="Property Price" />
+        </Row>
+
+        <Row>
+          <Input type="number" onChange={this.savings} label="Savings" />
+        </Row>
+
+        <Row>        
+          <Input type="number" onChange={this.stampDuty} label="Stamp Duty" />
+        </Row>
         
-        <select name="config" onChange={this.configChange}>
-          <option value="">Select</option>
-          <option value="default">Default</option>
-          <option value="westpac">Westpac</option>          
-        </select>
-        
-        <p>Property price</p>
-        <input id="number" type="number" onChange={this.priceChange}/>
+        <Button type="button"onClick={this.calculate}>Calculate</Button>
 
-        <p>Savings</p>
-        <input id="number" type="number" onChange={this.savings}/>
+        <Table>        
+          <tbody>
+            <tr>
+              <td>Savings</td>
+              <td>+{this.state.savings}</td>
+            </tr>
 
-        <p>Stamp duty</p>
-        <input id="number" type="number" onChange={this.stampDuty}/>
+            <tr>
+              <td>Stamp Duty</td>
+              <td>+{this.state.stampDuty}</td>
+            </tr>
+            
+            <tr>
+              <td>Transfer Fee</td>
+              <td>+{this.state.transferFee}</td>
+            </tr>
+            
+            <tr>
+              <td>Government Fee</td>
+              <td>+{this.state.governmentFee}</td>
+            </tr>
 
-        <br/>
-        <button type="button"onClick={this.calculate}>Calculate</button>
+            <tr>
+              <td>Deposit Amount</td>
+              <td>+{this.state.depositAmount}</td>
+            </tr>
+            
+            
+            <tr>
+              <td>Property Price</td>
+              <td>+{this.state.propertyPrice}</td>
+            </tr>
+            
+            
+            <tr>
+              <td>Deposit Ratio</td>
+              <td>+{this.state.depositPercent}%</td>
+            </tr>
+            
+            <tr>
+              <td>Loan Ratio</td>
+              <td>-{this.state.loanRatio}%</td>
+            </tr>
+            
+            <tr>
+              <td>LMI</td>
+              <td>-{this.state.lmiPercent}%</td>
+            </tr>
+            
+            <tr>
+              <td>LMI Amount</td>
+              <td>-{this.state.lmiAmount}%</td>
+            </tr>
+            
+            <tr>
+              <td>Loan Amount</td>
+              <td>-{this.state.loanAmount}%</td>
+            </tr>
 
-        
-        <p>Savings:           + {this.state.savings}</p>
-        <p>Stamp duty:        - {this.state.stampDuty}</p>
-        <p>Transfer fee:      - {this.state.transferFee}</p>
-        <p>Government fee:    - {this.state.governmentFee}</p> 
-
-        <p>Available deposit:    - {this.state.depositAmount}</p>               
-        <p>Property price:    + {this.state.propertyPrice}</p>
-        <p>Deposit ratio:         - {this.state.depositPercent}%</p>        
-        <p>Loan ratio:        - {this.state.loanRatio}%</p>
-        <p>LMI:       - {this.state.lmiPercent}%</p>
-        <p>LMI amount:        - {this.state.lmiAmount}</p>
-        <p>Loan amount:       - {this.state.loanAmount}</p>
+          </tbody>
+        </Table>    
+        </div>
       </div>
     );
   }
