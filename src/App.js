@@ -15,15 +15,27 @@ class App extends Component {
     this.priceChange = this.priceChange.bind(this);
     this.savings = this.savings.bind(this);
     this.stampDuty = this.stampDuty.bind(this);
-    this.calculate = this.calculate.bind(this);
+    this.update = (method) => (event) => {
+      this[method](event);
+      this.calculate();
+    };
+
+    this.store = {
+      config: conf('default'),
+      config: conf('default'),
+      stampDuty: 30000,
+      savings: 0,
+      depositAmount: 0,
+      propertyPrice: 0
+    };
     this.state = {};
   }
 
   configChange(event) {
-    const bank = event.target.value;;
+    const bank = event.target.value;
 
     if (bank) {
-      this.setState({ config: conf(bank) });
+      this.store.config = conf(bank);
     }
   }
 
@@ -31,7 +43,7 @@ class App extends Component {
     const propertyPrice = event.target.value;
 
     if (propertyPrice) {
-      this.setState({propertyPrice});
+      this.store.propertyPrice = propertyPrice;
     }
   }
 
@@ -39,7 +51,7 @@ class App extends Component {
     const savings = event.target.value;
 
     if (savings) {
-      this.setState({savings});
+      this.store.savings = savings;
     }
   }
   
@@ -47,61 +59,64 @@ class App extends Component {
     const stampDuty = event.target.value;
 
     if (stampDuty) {
-      this.setState({stampDuty});
+      this.store.stampDuty = stampDuty;
     }
   }
 
   calculate() {
-    const { config, propertyPrice, savings, stampDuty } = this.state;
+    const { config, propertyPrice, savings, stampDuty } = this.store;
     
-    const {
-      transferFee,
-      governmentFee,
-      depositAmount,
-      depositPercent,
-      loanRatio, 
-      lmiPercent,
-      lmiAmount,
-      loanAmount
-    } = calc(config, propertyPrice, savings, stampDuty);
-    
-    this.setState({
-      transferFee, governmentFee,
-      depositAmount, depositPercent, propertyPrice, loanRatio, lmiPercent, lmiAmount, loanAmount
-    });
+    try {
+        const {
+        transferFee,
+        governmentFee,
+        depositAmount,
+        depositPercent,
+        loanRatio, 
+        lmiPercent,
+        lmiAmount,
+        loanAmount
+      } = calc(config, propertyPrice, savings, stampDuty);
+      
+      this.setState({
+        transferFee, governmentFee, stampDuty,
+        savings, depositAmount, propertyPrice,
+        depositPercent, loanRatio, lmiPercent, 
+        lmiAmount, loanAmount
+      });
+    } catch (err) {
+      console.log('Invalid input');
+    }
   }
 
   render() {
     return (
       <div className="App">
-        <Navbar brand='Home Loan Calculator' />        
+        <Navbar brand='Home Loan Calculator'/>
 
         <div className="container">
         
         <br/>
         <Row>
-          <Input s={3} type='select' label="Pick LMI Rate" onChange={this.configChange}>
-            <option value=''></option>
+          <Input s={3} type='select' label="Pick LMI Rate" defaultValue="default" onChange={this.update('configChange')}>
             <option value='default'>Default</option>
             <option value='westpac'>Westpac</option>
           </Input>
         </Row>
       
         <Row>
-          <Input type="number" onChange={this.priceChange} label="Property Price" />
+          <Input type="number" onChange={this.update('priceChange')} label="Property Price" />
         </Row>
 
         <Row>
-          <Input type="number" onChange={this.savings} label="Savings" />
+          <Input type="number" onChange={this.update('savings')} label="Savings" />
         </Row>
 
         <Row>        
-          <Input type="number" onChange={this.stampDuty} label="Stamp Duty" />
-        </Row>
-        
-        <Button type="button"onClick={this.calculate}>Calculate</Button>
+          <Input type="number" onChange={this.update('stampDuty')} label="Stamp Duty" />
+        </Row>      
 
-        <Table>        
+        <Table className="bordered">        
           <tbody>
             <tr>
               <td>Savings</td>
@@ -110,58 +125,62 @@ class App extends Component {
 
             <tr>
               <td>Stamp Duty</td>
-              <td>+{this.state.stampDuty}</td>
+              <td>-{this.state.stampDuty}</td>
             </tr>
             
             <tr>
               <td>Transfer Fee</td>
-              <td>+{this.state.transferFee}</td>
+              <td>-{this.state.transferFee}</td>
             </tr>
             
             <tr>
               <td>Government Fee</td>
-              <td>+{this.state.governmentFee}</td>
+              <td>-{this.state.governmentFee}</td>
             </tr>
 
-            <tr>
-              <td>Deposit Amount</td>
-              <td>+{this.state.depositAmount}</td>
-            </tr>
-            
-            
+          </tbody>
+        </Table>
+        
+        <Row className="teal">
+          <Col s={8}>Available Deposit Amount</Col>
+          <Col s={4}>{this.state.depositAmount}</Col>
+        </Row>
+
+        <Table className="bordered">
+          <tbody>                    
             <tr>
               <td>Property Price</td>
-              <td>+{this.state.propertyPrice}</td>
+              <td>{this.state.propertyPrice}</td>
             </tr>
             
             
             <tr>
               <td>Deposit Ratio</td>
-              <td>+{this.state.depositPercent}%</td>
+              <td>{this.state.depositPercent}%</td>
             </tr>
             
             <tr>
               <td>Loan Ratio</td>
-              <td>-{this.state.loanRatio}%</td>
+              <td>{this.state.loanRatio}%</td>
             </tr>
             
             <tr>
               <td>LMI</td>
-              <td>-{this.state.lmiPercent}%</td>
+              <td>{this.state.lmiPercent}%</td>
             </tr>
             
             <tr>
               <td>LMI Amount</td>
-              <td>-{this.state.lmiAmount}%</td>
-            </tr>
-            
-            <tr>
-              <td>Loan Amount</td>
-              <td>-{this.state.loanAmount}%</td>
-            </tr>
+              <td>{this.state.lmiAmount}</td>
+            </tr>          
 
           </tbody>
-        </Table>    
+        </Table> 
+
+        <Row className="teal">
+          <Col s={8}>Loan Amount</Col>
+          <Col s={4}>{this.state.loanAmount}</Col>
+        </Row>
         </div>
       </div>
     );
