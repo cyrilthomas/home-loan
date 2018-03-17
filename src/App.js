@@ -6,6 +6,10 @@ import {
 import conf from './utils/config';
 import calc from './utils/lmi-calc';
 
+const strong = {
+  fontWeight: 800
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -142,9 +146,9 @@ class App extends Component {
           </tbody>
         </Table>
         
-        <Row className="teal">
-          <Col s={8}>Available Deposit Amount</Col>
-          <Col s={4}>{this.state.depositAmount}</Col>
+        <Row className="card-panel teal lighten-2">
+          <Col s={8}><span style={strong}>Available Deposit Amount</span></Col>
+          <Col s={4}><span style={strong}>{this.state.depositAmount}</span></Col>
         </Row>
 
         <Table className="bordered">
@@ -178,9 +182,9 @@ class App extends Component {
           </tbody>
         </Table> 
 
-        <Row className="teal">
-          <Col s={8}>Loan Amount</Col>
-          <Col s={4}>{this.state.loanAmount}</Col>
+        <Row className="card-panel teal lighten-2">
+          <Col s={8}><span style={strong}>Loan Amount</span></Col>
+          <Col s={4}><span style={strong}>{this.state.loanAmount}</span></Col>
         </Row>
         </div>
       </div>
