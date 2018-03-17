@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { 
-  Button, Input, 
-  Row, Dropdown, 
-  NavItem, Navbar, 
+  Input, Row,
   Col, Table
 } from 'react-materialize';
 import conf from './utils/config';
@@ -21,7 +19,6 @@ class App extends Component {
     };
 
     this.store = {
-      config: conf('default'),
       config: conf('default'),
       stampDuty: 30000,
       savings: 0,
@@ -92,8 +89,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Navbar brand='Home Loan Calculator'/>
-
+        <nav>
+          <div className="nav-wrapper">
+            <a className="brand-logo center">Loan Calculator</a>
+          </div>
+        </nav>
+        
         <div className="container">
         
         <br/>
