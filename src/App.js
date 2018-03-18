@@ -108,7 +108,11 @@ class App extends Component {
         <Modal
           header='Enter your details'
           bottomSheet
-          trigger={<Button>Configure</Button>}>
+          trigger={
+            <div className="fixed-action-btn" style={{bottom: '45px', right: '24px'}}>
+              <a className="right absolute btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+            </div>
+          }>
           <Row>
           <Input s={3} type='select' label="Pick LMI Rate" defaultValue="default" onChange={this.update('configChange')}>
             <option value='default'>Default</option>
@@ -117,15 +121,15 @@ class App extends Component {
         </Row>
       
         <Row>
-          <Input type="number" onChange={this.update('priceChange')} label="Property Price" />
+          <Input type="number" step="1000" onChange={this.update('priceChange')} label="Property Price" />
         </Row>
 
         <Row>
-          <Input type="number" onChange={this.update('savings')} label="Savings" />
+          <Input type="number" step="1000" onChange={this.update('savings')} label="Savings" />
         </Row>
 
         <Row>        
-          <Input type="number" onChange={this.update('stampDuty')} label="Stamp Duty" />
+          <Input type="number" step="1000" onChange={this.update('stampDuty')} label="Stamp Duty" />
         </Row>
         </Modal>
 
