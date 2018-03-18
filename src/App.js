@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { 
   Input, Row,
-  Col, Table
+  Col, Table,
+  Modal, Button
 } from 'react-materialize';
 import conf from './utils/config';
 import calc from './utils/lmi-calc';
 
 const strong = {
-  fontWeight: 800
+  fontWeight: 800,
+  color: 'white'
 };
 
 class App extends Component {
@@ -76,14 +78,15 @@ class App extends Component {
         loanRatio, 
         lmiPercent,
         lmiAmount,
-        loanAmount
+        loanAmount,
+        lvrPercent
       } = calc(config, propertyPrice, savings, stampDuty);
       
       this.setState({
         transferFee, governmentFee, stampDuty,
         savings, depositAmount, propertyPrice,
         depositPercent, loanRatio, lmiPercent, 
-        lmiAmount, loanAmount
+        lmiAmount, loanAmount, lvrPercent
       });
     } catch (err) {
       console.log('Invalid input');
@@ -102,7 +105,11 @@ class App extends Component {
         <div className="container">
         
         <br/>
-        <Row>
+        <Modal
+          header='Enter your details'
+          bottomSheet
+          trigger={<Button>Configure</Button>}>
+          <Row>
           <Input s={3} type='select' label="Pick LMI Rate" defaultValue="default" onChange={this.update('configChange')}>
             <option value='default'>Default</option>
             <option value='westpac'>Westpac</option>
@@ -119,7 +126,9 @@ class App extends Component {
 
         <Row>        
           <Input type="number" onChange={this.update('stampDuty')} label="Stamp Duty" />
-        </Row>      
+        </Row>
+        </Modal>
+
 
         <Table className="bordered">        
           <tbody>
@@ -177,7 +186,12 @@ class App extends Component {
             <tr>
               <td>LMI Amount</td>
               <td>{this.state.lmiAmount}</td>
-            </tr>          
+            </tr>
+            
+            <tr>
+              <td>LVR</td>
+              <td>{this.state.lvrPercent}%</td>
+            </tr>
 
           </tbody>
         </Table> 

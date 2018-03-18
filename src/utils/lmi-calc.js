@@ -30,8 +30,9 @@ export default (config, propertyPrice, savings, stampDuty = 30000) => {
     }
     
     lmiPercent = lmiPercent || 0;
-    const lmiAmount = (propertyPrice * (lmiPercent/ 100));    
+    const lmiAmount = (propertyPrice * (lmiPercent / 100));    
     const loanAmount = (propertyPrice - depositAmount + lmiAmount);
+    const lvrPercent = Math.round((1 - (depositAmount / loanAmount)) * 100);
 
     return {
         transferFee: TRANSFER_FEE,
@@ -42,6 +43,7 @@ export default (config, propertyPrice, savings, stampDuty = 30000) => {
         loanRatio, 
         lmiPercent,
         lmiAmount,
-        loanAmount
+        loanAmount,
+        lvrPercent
     };
 };
