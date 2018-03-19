@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { 
   Input, Row,
   Col, Table,
-  Modal, Button
+  Modal
 } from 'react-materialize';
 import conf from './utils/config';
 import calc from './utils/lmi-calc';
@@ -79,6 +79,7 @@ class App extends Component {
         lmiPercent,
         lmiAmount,
         loanAmount,
+        loanWithLmi,
         lvrPercent
       } = calc(config, propertyPrice, savings, stampDuty);
       
@@ -86,19 +87,35 @@ class App extends Component {
         transferFee, governmentFee, stampDuty,
         savings, depositAmount, propertyPrice,
         depositPercent, loanRatio, lmiPercent, 
-        lmiAmount, loanAmount, lvrPercent
+        lmiAmount, loanAmount, lvrPercent, loanWithLmi
       });
     } catch (err) {
-      console.log('Invalid input');
+      console.log('Invalid input', err);
     }
   }
 
   render() {
+    const {
+      savings,
+      stampDuty,
+      transferFee,
+      governmentFee,
+      depositAmount,
+      propertyPrice,
+      depositPercent,
+      loanRatio,
+      lmiPercent,
+      lmiAmount,
+      loanWithLmi,
+      lvrPercent,
+      loanAmount
+    } = this.state;
+
     return (
       <div className="App">
         <nav>
-          <div className="nav-wrapper">
-            <a className="brand-logo center">Loan Calculator</a>
+          <div className="nav-wrapper indigo darken-2">
+            <a className="brand-logo center">Loan Planner</a>
           </div>
         </nav>
         
@@ -109,8 +126,8 @@ class App extends Component {
           header='Enter your details'
           bottomSheet
           trigger={
-            <div className="fixed-action-btn" style={{bottom: '45px', right: '24px'}}>
-              <a className="right absolute btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+            <div className="fixed-action-btn" style={{ bottom: '35px', right: '24px' }}>
+              <a className="right absolute btn-floating btn-large waves-effect waves-light red accent-3"><i className="material-icons">add</i></a>
             </div>
           }>
           <Row>
@@ -138,22 +155,22 @@ class App extends Component {
           <tbody>
             <tr>
               <td>Savings</td>
-              <td>+{this.state.savings}</td>
+              <td>+{savings}</td>
             </tr>
 
             <tr>
               <td>Stamp Duty</td>
-              <td>-{this.state.stampDuty}</td>
+              <td>-{stampDuty}</td>
             </tr>
             
             <tr>
               <td>Transfer Fee</td>
-              <td>-{this.state.transferFee}</td>
+              <td>-{transferFee}</td>
             </tr>
             
             <tr>
               <td>Government Fee</td>
-              <td>-{this.state.governmentFee}</td>
+              <td>-{governmentFee}</td>
             </tr>
 
           </tbody>
@@ -161,40 +178,45 @@ class App extends Component {
         
         <Row className="card-panel teal lighten-2">
           <Col s={8}><span style={strong}>Available Deposit Amount</span></Col>
-          <Col s={4}><span style={strong}>{this.state.depositAmount}</span></Col>
+          <Col s={4}><span style={strong}>{depositAmount || 'Unavailable'}</span></Col>
         </Row>
 
         <Table className="bordered">
           <tbody>                    
             <tr>
               <td>Property Price</td>
-              <td>{this.state.propertyPrice}</td>
+              <td>{propertyPrice}</td>
             </tr>
             
             
             <tr>
               <td>Deposit Ratio</td>
-              <td>{this.state.depositPercent}%</td>
+              <td>{depositPercent}%</td>
             </tr>
             
             <tr>
               <td>Loan Ratio</td>
-              <td>{this.state.loanRatio}%</td>
+              <td>{loanRatio}%</td>
             </tr>
             
             <tr>
               <td>LMI</td>
-              <td>{this.state.lmiPercent}%</td>
+              <td>{lmiPercent}%</td>
             </tr>
             
             <tr>
               <td>LMI Amount</td>
-              <td>{this.state.lmiAmount}</td>
+              <td>{lmiAmount}</td>
+            </tr>
+            
+            <tr>
+              <td>Loan with LMI Amount</td>
+              <td>{loanWithLmi}</td>
             </tr>
             
             <tr>
               <td>LVR</td>
-              <td>{this.state.lvrPercent}%</td>
+              <td>{lvrPercent}%</td>
             </tr>
 
           </tbody>
@@ -202,7 +224,7 @@ class App extends Component {
 
         <Row className="card-panel teal lighten-2">
           <Col s={8}><span style={strong}>Loan Amount</span></Col>
-          <Col s={4}><span style={strong}>{this.state.loanAmount}</span></Col>
+          <Col s={4}><span style={strong}>{loanAmount || 'Unavailable'}</span></Col>
         </Row>
         </div>
       </div>
