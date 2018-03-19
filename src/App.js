@@ -12,6 +12,10 @@ const strong = {
   color: 'white'
 };
 
+const fontSize = {
+  fontSize: '16px'
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +30,7 @@ class App extends Component {
 
     this.store = {
       config: conf('default'),
-      stampDuty: 30000,
+      userStampDuty: 0,
       savings: 0,
       depositAmount: 0,
       propertyPrice: 0
@@ -59,15 +63,15 @@ class App extends Component {
   }
   
   stampDuty(event) {
-    const stampDuty = event.target.value;
+    const userStampDuty = event.target.value;
 
-    if (stampDuty) {
-      this.store.stampDuty = stampDuty;
+    if (userStampDuty) {
+      this.store.userStampDuty = userStampDuty;
     }
   }
 
   calculate() {
-    const { config, propertyPrice, savings, stampDuty } = this.store;
+    const { config, propertyPrice, savings, userStampDuty } = this.store;
     
     try {
         const {
@@ -78,16 +82,16 @@ class App extends Component {
         loanRatio, 
         lmiPercent,
         lmiAmount,
-        loanAmount,
         loanWithLmi,
-        lvrPercent
-      } = calc(config, propertyPrice, savings, stampDuty);
+        lvrPercent,
+        stampDuty
+      } = calc(config, propertyPrice, savings, userStampDuty);
       
       this.setState({
         transferFee, governmentFee, stampDuty,
         savings, depositAmount, propertyPrice,
         depositPercent, loanRatio, lmiPercent, 
-        lmiAmount, loanAmount, lvrPercent, loanWithLmi
+        lmiAmount, lvrPercent, loanWithLmi
       });
     } catch (err) {
       console.log('Invalid input', err);
@@ -107,8 +111,7 @@ class App extends Component {
       lmiPercent,
       lmiAmount,
       loanWithLmi,
-      lvrPercent,
-      loanAmount
+      lvrPercent
     } = this.state;
 
     return (
@@ -119,7 +122,7 @@ class App extends Component {
           </div>
         </nav>
         
-        <div className="container">
+        <div className="container" style={{ padding: '0 10% ' }}>
         
         <br/>
         <Modal
@@ -138,15 +141,15 @@ class App extends Component {
         </Row>
       
         <Row>
-          <Input type="number" step="1000" onChange={this.update('priceChange')} label="Property Price" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('priceChange')} label="Property Price" />
         </Row>
 
         <Row>
-          <Input type="number" step="1000" onChange={this.update('savings')} label="Savings" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('savings')} label="Savings" />
         </Row>
 
         <Row>        
-          <Input type="number" step="1000" onChange={this.update('stampDuty')} label="Stamp Duty" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('stampDuty')} label="Stamp Duty" />
         </Row>
         </Modal>
 
