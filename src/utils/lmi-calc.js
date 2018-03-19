@@ -1,6 +1,6 @@
 
-const TRANSFER_FEE = 0;
-const GOVERNMENT_FEE = 0;
+const TRANSFER_FEE = 139;
+const GOVERNMENT_FEE = 139;
 
 export default (config, propertyPrice, savings, stampDuty = 30000) => {    
     const { LVR_RANGES, PRICE_RANGES, LMI_RANGES } = config;
