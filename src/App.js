@@ -207,12 +207,7 @@ class App extends Component {
             <tr>
               <td>LMI Amount</td>
               <td>{lmiAmount}</td>
-            </tr>
-            
-            <tr>
-              <td>Loan with LMI Amount</td>
-              <td>{loanWithLmi}</td>
-            </tr>
+            </tr>          
             
             <tr>
               <td>LVR</td>
@@ -224,7 +219,7 @@ class App extends Component {
 
         <Row className="card-panel teal lighten-2">
           <Col s={8}><span style={strong}>Loan Amount</span></Col>
-          <Col s={4}><span style={strong}>{loanAmount || 'Unavailable'}</span></Col>
+          <Col s={4}><span style={strong}>{loanWithLmi || 'Unavailable'}</span></Col>
         </Row>
         </div>
       </div>
