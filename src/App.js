@@ -221,6 +221,7 @@ class App extends Component {
           <Col s={8}><span style={strong}>Loan Amount</span></Col>
           <Col s={4}><span style={strong}>{loanWithLmi || 'Unavailable'}</span></Col>
         </Row>
+        <p>Not included - solicitor fees</p>
         </div>
       </div>
     );
