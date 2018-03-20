@@ -15,6 +15,8 @@ const strong = {
 const fontSize = { fontSize: '16px' };
 const redStyle = { backgroundColor: '#f04242' };
 const blueStyle = { backgroundColor: '#241e4e' };
+const greyStyle = { backgroundColor: '#efefef' };
+const floatStyle = { bottom: '35px', right: '24px' };
 
 class App extends Component {
   constructor(props) {
@@ -117,7 +119,7 @@ class App extends Component {
     } = this.state;
 
     return (
-      <div className="App" style={{ backgroundColor: '#efefef' }}>
+      <div className="App">
         <nav>
           <div className="nav-wrapper indigo darken-2">
             <a className="brand-logo center">Loan Planner</a>
@@ -131,7 +133,7 @@ class App extends Component {
           header='Enter your details'
           bottomSheet
           trigger={
-            <div className="fixed-action-btn" style={{ bottom: '35px', right: '24px' }}>
+            <div className="fixed-action-btn" style={floatStyle}>
               <a className="right absolute btn-floating btn-large waves-effect waves-light indigo darken-2"><i className="material-icons">add</i></a>
             </div>
           }>
