@@ -12,9 +12,9 @@ const strong = {
   color: 'white'
 };
 
-const fontSize = {
-  fontSize: '16px'
-}
+const fontSize = { fontSize: '16px' };
+const redStyle = { backgroundColor: '#f04242' };
+const blueStyle = { backgroundColor: '#241e4e' };
 
 class App extends Component {
   constructor(props) {
@@ -82,6 +82,7 @@ class App extends Component {
         loanRatio, 
         lmiPercent,
         lmiAmount,
+        loanAmount,
         loanWithLmi,
         lvrPercent,
         stampDuty
@@ -90,7 +91,7 @@ class App extends Component {
       this.setState({
         transferFee, governmentFee, stampDuty,
         savings, depositAmount, propertyPrice,
-        depositPercent, loanRatio, lmiPercent, 
+        depositPercent, loanRatio, lmiPercent, loanAmount,
         lmiAmount, lvrPercent, loanWithLmi
       });
     } catch (err) {
@@ -110,19 +111,20 @@ class App extends Component {
       loanRatio,
       lmiPercent,
       lmiAmount,
+      loanAmount,
       loanWithLmi,
       lvrPercent
     } = this.state;
 
     return (
-      <div className="App">
+      <div className="App" style={{ backgroundColor: '#efefef' }}>
         <nav>
           <div className="nav-wrapper indigo darken-2">
             <a className="brand-logo center">Loan Planner</a>
           </div>
         </nav>
         
-        <div className="container" style={{ padding: '0 10% ' }}>
+        <div className="container" style={{ padding: '0 10%', backgroundColor: 'white' }}>
         
         <br/>
         <Modal
@@ -130,7 +132,7 @@ class App extends Component {
           bottomSheet
           trigger={
             <div className="fixed-action-btn" style={{ bottom: '35px', right: '24px' }}>
-              <a className="right absolute btn-floating btn-large waves-effect waves-light red accent-3"><i className="material-icons">add</i></a>
+              <a className="right absolute btn-floating btn-large waves-effect waves-light indigo darken-2"><i className="material-icons">add</i></a>
             </div>
           }>
           <Row>
@@ -153,8 +155,16 @@ class App extends Component {
         </Row>
         </Modal>
 
-
-        <Table className="bordered">        
+        <Table>        
+          <tbody>
+          <tr>
+              <td>Property Price</td>
+              <td>{propertyPrice}</td>
+            </tr>
+          </tbody>
+        </Table>
+                
+        <Table>        
           <tbody>
             <tr>
               <td>Savings</td>
@@ -178,49 +188,39 @@ class App extends Component {
 
           </tbody>
         </Table>
-        
-        <Row className="card-panel teal lighten-2">
+
+        <Row className="card-panel" style={redStyle}>
           <Col s={8}><span style={strong}>Available Deposit Amount</span></Col>
           <Col s={4}><span style={strong}>{depositAmount || 'Unavailable'}</span></Col>
         </Row>
 
-        <Table className="bordered">
-          <tbody>                    
+        <Table>
+          <tbody>
+            {loanAmount &&
             <tr>
-              <td>Property Price</td>
-              <td>{propertyPrice}</td>
+              <td>Loan Amount ({loanRatio}%)</td>
+              <td>{loanAmount}</td>
             </tr>
-            
-            
+            }
+
+            {lmiAmount && 
             <tr>
-              <td>Deposit Ratio</td>
-              <td>{depositPercent}%</td>
-            </tr>
-            
-            <tr>
-              <td>Loan Ratio</td>
-              <td>{loanRatio}%</td>
-            </tr>
-            
-            <tr>
-              <td>LMI</td>
-              <td>{lmiPercent}%</td>
-            </tr>
-            
-            <tr>
-              <td>LMI Amount</td>
+              <td>LMI Amount ({lmiPercent}%)</td>
               <td>{lmiAmount}</td>
-            </tr>          
-            
-            <tr>
-              <td>LVR</td>
-              <td>{lvrPercent}%</td>
             </tr>
+            }
+            
+            {lvrPercent &&
+            <tr>
+              <td>LVR %</td>
+              <td>{lvrPercent}</td>
+            </tr>
+            }
 
           </tbody>
         </Table> 
 
-        <Row className="card-panel teal lighten-2">
+        <Row className="card-panel" style={redStyle}>
           <Col s={8}><span style={strong}>Loan Amount</span></Col>
           <Col s={4}><span style={strong}>{loanWithLmi || 'Unavailable'}</span></Col>
         </Row>

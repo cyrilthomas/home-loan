@@ -38,7 +38,7 @@ export default (config, propertyPrice, savings, userStampDuty = null) => {
     
     lmiPercent = lmiPercent || 0;    
     const loanAmount = (grossPropertyPrice - depositAmount);
-    const lmiAmount = (loanAmount * (lmiPercent / 100));
+    const lmiAmount = Math.round(loanAmount * (lmiPercent / 100));
     const loanWithLmi = loanAmount + lmiAmount;
     // const lvrPercent = Math.round((1 - (depositAmount / loanWithLmi)) * 100);
     const lvrPercent = Math.round((loanWithLmi / grossPropertyPrice) * 100);
