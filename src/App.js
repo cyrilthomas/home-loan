@@ -22,7 +22,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.configChange = this.configChange.bind(this);
-    this.priceChange = this.priceChange.bind(this);
+    this.landPriceChange = this.landPriceChange.bind(this);
+    this.housePriceChange = this.housePriceChange.bind(this);
     this.savings = this.savings.bind(this);
     this.stampDuty = this.stampDuty.bind(this);
     this.update = (method) => (event) => {
@@ -32,10 +33,11 @@ class App extends Component {
 
     this.store = {
       config: conf('default'),
-      userStampDuty: 0,
+      userStampDuty: null,
       savings: 0,
       depositAmount: 0,
-      propertyPrice: 0
+      landPrice: 0,
+      housePrice: 0
     };
     this.state = {};
   }
@@ -48,11 +50,19 @@ class App extends Component {
     }
   }
 
-  priceChange(event) {
-    const propertyPrice = event.target.value;
+  landPriceChange(event) {
+    const landPrice = event.target.value;
 
-    if (propertyPrice) {
-      this.store.propertyPrice = propertyPrice;
+    if (landPrice) {
+      this.store.landPrice = landPrice;
+    }
+  }
+
+  housePriceChange(event) {
+    const housePrice = event.target.value;
+
+    if (housePrice) {
+      this.store.housePrice = housePrice;
     }
   }
 
@@ -73,7 +83,7 @@ class App extends Component {
   }
 
   calculate() {
-    const { config, propertyPrice, savings, userStampDuty } = this.store;
+    const { config, landPrice, housePrice, savings, userStampDuty } = this.store;
     
     try {
         const {
@@ -88,11 +98,11 @@ class App extends Component {
         loanWithLmi,
         lvrPercent,
         stampDuty
-      } = calc(config, propertyPrice, savings, userStampDuty);
+      } = calc(config, landPrice, housePrice, savings, userStampDuty);
       
       this.setState({
         transferFee, governmentFee, stampDuty,
-        savings, depositAmount, propertyPrice,
+        savings, depositAmount, landPrice, housePrice,
         depositPercent, loanRatio, lmiPercent, loanAmount,
         lmiAmount, lvrPercent, loanWithLmi
       });
@@ -108,7 +118,8 @@ class App extends Component {
       transferFee,
       governmentFee,
       depositAmount,
-      propertyPrice,
+      landPrice,
+      housePrice,
       depositPercent,
       loanRatio,
       lmiPercent,
@@ -145,7 +156,10 @@ class App extends Component {
         </Row>
       
         <Row>
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('priceChange')} label="Property Price" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('landPriceChange')} label="Land Price" />
+        </Row>
+        <Row>
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('housePriceChange')} label="House Price" />
         </Row>
 
         <Row>
@@ -160,8 +174,12 @@ class App extends Component {
         <Table>        
           <tbody>
           <tr>
-              <td>Property Price</td>
-              <td>{propertyPrice}</td>
+              <td>Land Price</td>
+              <td>{landPrice}</td>
+            </tr>
+            <tr>
+              <td>House Price</td>
+              <td>{housePrice}</td>
             </tr>
           </tbody>
         </Table>

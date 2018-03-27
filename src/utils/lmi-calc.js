@@ -2,12 +2,13 @@
 const TRANSFER_FEE = 139;
 const GOVERNMENT_FEE = 139;
 
-export default (config, propertyPrice, savings, userStampDuty = null) => {    
+export default (config, landPrice, housePrice, savings, userStampDuty = null) => {    
     const { LVR_RANGES, PRICE_RANGES, LMI_RANGES } = config;
     // Find property and LMI_RANGES range
     let lmiBracket;
     let found = false;
-    let stampDuty = parseInt(userStampDuty) || Math.round((((propertyPrice - 300001) * 4.5)/100)  + 8990);
+    const propertyPrice = landPrice + housePrice;
+    const stampDuty =  (userStampDuty !== null) ? parseInt(userStampDuty) : Math.round((((landPrice - 300001) * 4.5)/100)  + 8990);
     const grossPropertyPrice = parseInt(propertyPrice) + parseInt(stampDuty) + TRANSFER_FEE + GOVERNMENT_FEE;
     
     for (let i = 0; i < PRICE_RANGES.length; i++) {
