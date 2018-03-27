@@ -10,6 +10,10 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
     const propertyPrice = parseInt(landPrice) + parseInt(housePrice);    
     const stampDuty =  (userStampDuty !== null) ? parseInt(userStampDuty) : Math.round((((parseInt(landPrice) - 300001) * 4.5)/100)  + 8990);
     const additionalFees = parseInt(stampDuty) + TRANSFER_FEE + GOVERNMENT_FEE + parseInt(solicitorFees);
+        
+    const upfrontLandBookingAmount = (0.25 / 100) * parseInt(landPrice);
+    const upfrontLandDepositAmount = ((parseInt(landDepositPercent) - 0.25) / 100) * parseInt(landPrice);
+    const upfrontHouseDepositAmount = (parseInt(houseDepositPercent) / 100) * parseInt(housePrice);
     
     for (let i = 0; i < PRICE_RANGES.length; i++) {
         const [min, max] = PRICE_RANGES[i];
@@ -57,7 +61,8 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
         loanWithLmi,
         lvrPercent,
         stampDuty,
-        upfrontLandDepositAmount: (parseInt(landDepositPercent) / 100) * parseInt(landPrice),
-        upfrontHouseDepositAmount: (parseInt(houseDepositPercent) / 100) * parseInt(housePrice)
+        upfrontLandBookingAmount,
+        upfrontLandDepositAmount,
+        upfrontHouseDepositAmount
     };
 };

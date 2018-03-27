@@ -126,6 +126,7 @@ class App extends Component {
         loanAmount,
         loanWithLmi,
         lvrPercent,
+        upfrontLandBookingAmount,
         upfrontLandDepositAmount,
         upfrontHouseDepositAmount        
       } = calc(config, landPrice, housePrice, savings, solicitorFees, landDepositPercent, houseDepositPercent, userStampDuty);
@@ -135,7 +136,7 @@ class App extends Component {
         propertyPrice, savings, depositAmount, depositPercent,
         loanRatio, lmiPercent, lmiAmount,
         loanAmount, loanWithLmi, lvrPercent,
-        upfrontLandDepositAmount, upfrontHouseDepositAmount
+        upfrontLandBookingAmount, upfrontLandDepositAmount, upfrontHouseDepositAmount
       });
     } catch (err) {
       console.log('Invalid input', err);
@@ -158,6 +159,7 @@ class App extends Component {
       loanAmount,
       loanWithLmi,
       lvrPercent,
+      upfrontLandBookingAmount,
       upfrontLandDepositAmount,
       upfrontHouseDepositAmount
     } = this.state;
@@ -259,12 +261,17 @@ class App extends Component {
             </tr>
             
             <tr>
-              <td>Land upfront deposit</td>
+              <td>Land upfront booking amount</td>
+              <td>{upfrontLandBookingAmount}</td>
+            </tr>
+
+            <tr>
+              <td>Land upfront deposit amount</td>
               <td>{upfrontLandDepositAmount}</td>
             </tr>
 
             <tr>
-              <td>House upfront deposit</td>
+              <td>House upfront deposit amount</td>
               <td>{upfrontHouseDepositAmount}</td>
             </tr>            
 
