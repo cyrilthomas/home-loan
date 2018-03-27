@@ -5,7 +5,7 @@ import {
   Modal
 } from 'react-materialize';
 import conf from './utils/config';
-import calc from './utils/lmi-calc';
+import calc from './utils/loan-calc';
 
 const strong = {
   fontWeight: 800,
@@ -37,7 +37,9 @@ class App extends Component {
       savings: 0,
       landPrice: 0,
       housePrice: 0,
-      solicitorFees: 0
+      solicitorFees: 0,
+      landDepositPercent: 0,
+      houseDepositPercent: 0
     };
 
     this.state = {};
@@ -59,11 +61,27 @@ class App extends Component {
     }
   }
 
+  landDepositPercentChange(event) {
+    const landDepositPercent = event.target.value;
+
+    if (landDepositPercent) {
+      this.form.landDepositPercent = landDepositPercent;
+    }
+  }
+
   housePriceChange(event) {
     const housePrice = event.target.value;
 
     if (housePrice) {
       this.form.housePrice = housePrice;
+    }
+  }
+
+  houseDepositPercentChange(event) {
+    const houseDepositPercent = event.target.value;
+
+    if (houseDepositPercent) {
+      this.form.houseDepositPercent = houseDepositPercent;
     }
   }
 
@@ -92,7 +110,7 @@ class App extends Component {
   }
 
   calculate() {
-    const { config, landPrice, housePrice, savings, userStampDuty, solicitorFees } = this.form;
+    const { config, landPrice, landDepositPercent, houseDepositPercent, housePrice, savings, userStampDuty, solicitorFees } = this.form;
     
     try {
         const {
@@ -107,14 +125,17 @@ class App extends Component {
         lmiAmount,
         loanAmount,
         loanWithLmi,
-        lvrPercent        
-      } = calc(config, landPrice, housePrice, savings, solicitorFees, userStampDuty);
+        lvrPercent,
+        upfrontLandDepositAmount,
+        upfrontHouseDepositAmount        
+      } = calc(config, landPrice, housePrice, savings, solicitorFees, landDepositPercent, houseDepositPercent, userStampDuty);
       
       this.setState({
         transferFee, governmentFee, stampDuty,
         propertyPrice, savings, depositAmount, depositPercent,
         loanRatio, lmiPercent, lmiAmount,
-        loanAmount, loanWithLmi, lvrPercent
+        loanAmount, loanWithLmi, lvrPercent,
+        upfrontLandDepositAmount, upfrontHouseDepositAmount
       });
     } catch (err) {
       console.log('Invalid input', err);
@@ -122,7 +143,7 @@ class App extends Component {
   }
 
   render() {
-    const { landPrice, housePrice, savings, solicitorFees, userStampDuty } = this.form;
+    const { landPrice, landDepositPercent, houseDepositPercent, housePrice, savings, solicitorFees, userStampDuty } = this.form;
     
     const {
       propertyPrice,
@@ -136,7 +157,9 @@ class App extends Component {
       lmiAmount,
       loanAmount,
       loanWithLmi,
-      lvrPercent
+      lvrPercent,
+      upfrontLandDepositAmount,
+      upfrontHouseDepositAmount
     } = this.state;
 
     return (
@@ -168,8 +191,17 @@ class App extends Component {
         <Row>
           <Input type="number" step="1000" style={fontSize} onChange={this.update('landPriceChange')} label="Land Price" />
         </Row>
+
+        <Row>
+          <Input type="number" step="5" style={fontSize} onChange={this.update('landDepositPercentChange')} label="Land Deposit %" />
+        </Row>
+                
         <Row>
           <Input type="number" step="1000" style={fontSize} onChange={this.update('housePriceChange')} label="House Price" />
+        </Row>
+
+        <Row>
+          <Input type="number" step="5" style={fontSize} onChange={this.update('houseDepositPercentChange')} label="House Deposit %" />
         </Row>
 
         <Row>
@@ -220,13 +252,26 @@ class App extends Component {
               <td>Total property</td>
               <td>{propertyPrice}</td>
             </tr>
+
             <tr>
               <td>Savings</td>
               <td>{savings}</td>
             </tr>
+            
+            <tr>
+              <td>Land upfront deposit</td>
+              <td>{upfrontLandDepositAmount}</td>
+            </tr>
 
             <tr>
-                <td style={strong}>Available Deposit Amount</td>
+              <td>House upfront deposit</td>
+              <td>{upfrontHouseDepositAmount}</td>
+            </tr>            
+
+            <tr>
+                <td style={strong}>
+                Available Loan Deposit Amount<br/>
+                (adding 5 or 10 % deposit and any extras)</td>
                 <td style={strong}>{depositAmount || 'Unavailable'}</td>
             </tr>
 

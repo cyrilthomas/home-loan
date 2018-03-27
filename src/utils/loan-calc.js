@@ -2,7 +2,7 @@
 const TRANSFER_FEE = 139;
 const GOVERNMENT_FEE = 139;
 
-export default (config, landPrice, housePrice, savings, solicitorFees, userStampDuty = null) => {    
+export default (config, landPrice, housePrice, savings, solicitorFees, landDepositPercent, houseDepositPercent, userStampDuty = null) => {    
     const { LVR_RANGES, PRICE_RANGES, LMI_RANGES } = config;
     // Find property and LMI_RANGES range
     let lmiBracket;
@@ -56,6 +56,8 @@ export default (config, landPrice, housePrice, savings, solicitorFees, userStamp
         loanAmount,
         loanWithLmi,
         lvrPercent,
-        stampDuty
+        stampDuty,
+        upfrontLandDepositAmount: (parseInt(landDepositPercent) / 100) * parseInt(landPrice),
+        upfrontHouseDepositAmount: (parseInt(houseDepositPercent) / 100) * parseInt(housePrice)
     };
 };
