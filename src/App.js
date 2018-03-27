@@ -31,14 +31,14 @@ class App extends Component {
       this.calculate();
     };
 
-    this.store = {
+    this.form = {
       config: conf('default'),
       userStampDuty: null,
       savings: 0,
-      depositAmount: 0,
       landPrice: 0,
       housePrice: 0
     };
+
     this.state = {};
   }
 
@@ -46,7 +46,7 @@ class App extends Component {
     const bank = event.target.value;
 
     if (bank) {
-      this.store.config = conf(bank);
+      this.form.config = conf(bank);
     }
   }
 
@@ -54,7 +54,7 @@ class App extends Component {
     const landPrice = event.target.value;
 
     if (landPrice) {
-      this.store.landPrice = landPrice;
+      this.form.landPrice = landPrice;
     }
   }
 
@@ -62,7 +62,7 @@ class App extends Component {
     const housePrice = event.target.value;
 
     if (housePrice) {
-      this.store.housePrice = housePrice;
+      this.form.housePrice = housePrice;
     }
   }
 
@@ -70,7 +70,7 @@ class App extends Component {
     const savings = event.target.value;
 
     if (savings) {
-      this.store.savings = savings;
+      this.form.savings = savings;
     }
   }
   
@@ -78,17 +78,19 @@ class App extends Component {
     const userStampDuty = event.target.value;
 
     if (userStampDuty) {
-      this.store.userStampDuty = userStampDuty;
+      this.form.userStampDuty = userStampDuty;
     }
   }
 
   calculate() {
-    const { config, landPrice, housePrice, savings, userStampDuty } = this.store;
+    const { config, landPrice, housePrice, savings, userStampDuty } = this.form;
     
     try {
         const {
         transferFee,
         governmentFee,
+        stampDuty,
+        propertyPrice,
         depositAmount,
         depositPercent,
         loanRatio, 
@@ -96,15 +98,14 @@ class App extends Component {
         lmiAmount,
         loanAmount,
         loanWithLmi,
-        lvrPercent,
-        stampDuty
+        lvrPercent        
       } = calc(config, landPrice, housePrice, savings, userStampDuty);
       
       this.setState({
         transferFee, governmentFee, stampDuty,
-        savings, depositAmount, landPrice, housePrice,
-        depositPercent, loanRatio, lmiPercent, loanAmount,
-        lmiAmount, lvrPercent, loanWithLmi
+        propertyPrice, savings, depositAmount, depositPercent,
+        loanRatio, lmiPercent, lmiAmount,
+        loanAmount, loanWithLmi, lvrPercent
       });
     } catch (err) {
       console.log('Invalid input', err);
@@ -112,14 +113,14 @@ class App extends Component {
   }
 
   render() {
+    const { landPrice, housePrice, savings, userStampDuty } = this.form;
+    
     const {
-      savings,
+      propertyPrice,
       stampDuty,
       transferFee,
       governmentFee,
       depositAmount,
-      landPrice,
-      housePrice,
       depositPercent,
       loanRatio,
       lmiPercent,
@@ -181,30 +182,37 @@ class App extends Component {
               <td>House Price</td>
               <td>{housePrice}</td>
             </tr>
+
           </tbody>
         </Table>
                 
         <Table>        
           <tbody>
-            <tr>
-              <td>Savings</td>
-              <td>+{savings}</td>
-            </tr>
 
             <tr>
               <td>Stamp Duty</td>
-              <td>-{stampDuty}</td>
+              <td>{stampDuty}</td>
             </tr>
             
             <tr>
               <td>Transfer Fee</td>
-              <td>-{transferFee}</td>
+              <td>{transferFee}</td>
             </tr>
             
             <tr>
               <td>Government Fee</td>
-              <td>-{governmentFee}</td>
+              <td>{governmentFee}</td>
             </tr>
+
+            <tr>
+              <td>Total property</td>
+              <td>{propertyPrice}</td>
+            </tr>
+            <tr>
+              <td>Savings</td>
+              <td>{savings}</td>
+            </tr>
+
 
           </tbody>
         </Table>

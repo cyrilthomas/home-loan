@@ -7,14 +7,14 @@ export default (config, landPrice, housePrice, savings, userStampDuty = null) =>
     // Find property and LMI_RANGES range
     let lmiBracket;
     let found = false;
-    const propertyPrice = landPrice + housePrice;
-    const stampDuty =  (userStampDuty !== null) ? parseInt(userStampDuty) : Math.round((((landPrice - 300001) * 4.5)/100)  + 8990);
-    const grossPropertyPrice = parseInt(propertyPrice) + parseInt(stampDuty) + TRANSFER_FEE + GOVERNMENT_FEE;
+    const propertyPrice = parseInt(landPrice) + parseInt(housePrice);
+    const stampDuty =  (userStampDuty !== null) ? parseInt(userStampDuty) : Math.round((((parseInt(landPrice) - 300001) * 4.5)/100)  + 8990);
+    const landFees = parseInt(stampDuty) + TRANSFER_FEE + GOVERNMENT_FEE;
     
     for (let i = 0; i < PRICE_RANGES.length; i++) {
         const [min, max] = PRICE_RANGES[i];
         
-        if (grossPropertyPrice >= min && grossPropertyPrice <= max) {        
+        if (propertyPrice >= min && propertyPrice <= max) {        
             lmiBracket = LMI_RANGES[i];
             found = true;
             break;
@@ -24,9 +24,9 @@ export default (config, landPrice, housePrice, savings, userStampDuty = null) =>
     if (!found) throw new RangeError('Invalid range');
 
     lmiBracket = lmiBracket || [];
-    const depositAmount = parseInt(savings);
-    const depositPercent = Math.round((depositAmount / grossPropertyPrice) * 100);    
-    const loanRatio = Math.round((1 - (depositAmount / grossPropertyPrice)) * 100); // equivalent of loan amount / gross property
+    const depositAmount = parseInt(savings) - landFees;
+    const depositPercent = Math.round((depositAmount / propertyPrice) * 100);    
+    const loanRatio = Math.round((1 - (depositAmount / propertyPrice)) * 100); // equivalent of loan amount / gross property
 
     let lmiPercent;
     for (let j = 0; j < LVR_RANGES.length; j++) {
@@ -38,16 +38,16 @@ export default (config, landPrice, housePrice, savings, userStampDuty = null) =>
     }
     
     lmiPercent = lmiPercent || 0;    
-    const loanAmount = (grossPropertyPrice - depositAmount);
+    const loanAmount = (propertyPrice - depositAmount);
     const lmiAmount = Math.round(loanAmount * (lmiPercent / 100));
     const loanWithLmi = loanAmount + lmiAmount;
     // const lvrPercent = Math.round((1 - (depositAmount / loanWithLmi)) * 100);
-    const lvrPercent = Math.round((loanWithLmi / grossPropertyPrice) * 100);
+    const lvrPercent = Math.round((loanWithLmi / propertyPrice) * 100);
 
     return {
         transferFee: TRANSFER_FEE,
         governmentFee: GOVERNMENT_FEE,
-        depositAmount: savings,
+        depositAmount,
         propertyPrice,
         depositPercent,
         loanRatio, 
