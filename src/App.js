@@ -217,7 +217,7 @@ class App extends Component {
         </Row>
         </Modal>
 
-        <Table>        
+        <Table className="highlight bordered">        
           <tbody>
           <tr>
               <td>Land Price</td>
