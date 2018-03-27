@@ -9,7 +9,7 @@ import calc from './utils/lmi-calc';
 
 const strong = {
   fontWeight: 800,
-  color: 'white'
+  // color: 'white'
 };
 
 const fontSize = { fontSize: '16px' };
@@ -36,7 +36,8 @@ class App extends Component {
       userStampDuty: null,
       savings: 0,
       landPrice: 0,
-      housePrice: 0
+      housePrice: 0,
+      solicitorFees: 0
     };
 
     this.state = {};
@@ -66,6 +67,14 @@ class App extends Component {
     }
   }
 
+  solicitorFees(event) {
+    const solicitorFees = event.target.value;
+
+    if (solicitorFees) {
+      this.form.solicitorFees = solicitorFees;
+    }
+  }
+
   savings(event) {
     const savings = event.target.value;
 
@@ -83,7 +92,7 @@ class App extends Component {
   }
 
   calculate() {
-    const { config, landPrice, housePrice, savings, userStampDuty } = this.form;
+    const { config, landPrice, housePrice, savings, userStampDuty, solicitorFees } = this.form;
     
     try {
         const {
@@ -99,7 +108,7 @@ class App extends Component {
         loanAmount,
         loanWithLmi,
         lvrPercent        
-      } = calc(config, landPrice, housePrice, savings, userStampDuty);
+      } = calc(config, landPrice, housePrice, savings, solicitorFees, userStampDuty);
       
       this.setState({
         transferFee, governmentFee, stampDuty,
@@ -113,7 +122,7 @@ class App extends Component {
   }
 
   render() {
-    const { landPrice, housePrice, savings, userStampDuty } = this.form;
+    const { landPrice, housePrice, savings, solicitorFees, userStampDuty } = this.form;
     
     const {
       propertyPrice,
@@ -170,6 +179,10 @@ class App extends Component {
         <Row>        
           <Input type="number" step="1000" style={fontSize} onChange={this.update('stampDuty')} label="Stamp Duty" />
         </Row>
+        
+        <Row>        
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('solicitorFees')} label="Solicitor Fees" />
+        </Row>
         </Modal>
 
         <Table>        
@@ -182,12 +195,6 @@ class App extends Component {
               <td>House Price</td>
               <td>{housePrice}</td>
             </tr>
-
-          </tbody>
-        </Table>
-                
-        <Table>        
-          <tbody>
 
             <tr>
               <td>Stamp Duty</td>
@@ -203,6 +210,11 @@ class App extends Component {
               <td>Government Fee</td>
               <td>{governmentFee}</td>
             </tr>
+            
+            <tr>
+              <td>Solicitor Fees</td>
+              <td>{solicitorFees}</td>
+            </tr>
 
             <tr>
               <td>Total property</td>
@@ -213,17 +225,11 @@ class App extends Component {
               <td>{savings}</td>
             </tr>
 
+            <tr>
+                <td style={strong}>Available Deposit Amount</td>
+                <td style={strong}>{depositAmount || 'Unavailable'}</td>
+            </tr>
 
-          </tbody>
-        </Table>
-
-        <Row className="card-panel" style={redStyle}>
-          <Col s={8}><span style={strong}>Available Deposit Amount</span></Col>
-          <Col s={4}><span style={strong}>{depositAmount || 'Unavailable'}</span></Col>
-        </Row>
-
-        <Table>
-          <tbody>
             {loanAmount &&
             <tr>
               <td>Loan Amount ({loanRatio}%)</td>
@@ -245,14 +251,12 @@ class App extends Component {
             </tr>
             }
 
+            <tr>
+              <td style={strong}>Loan Amount</td>
+              <td style={strong}>{loanWithLmi || 'Unavailable'}</td>
+            </tr>
           </tbody>
-        </Table> 
-
-        <Row className="card-panel" style={redStyle}>
-          <Col s={8}><span style={strong}>Loan Amount</span></Col>
-          <Col s={4}><span style={strong}>{loanWithLmi || 'Unavailable'}</span></Col>
-        </Row>
-        <p>Not included - solicitor fees</p>
+        </Table>      
         </div>
       </div>
     );

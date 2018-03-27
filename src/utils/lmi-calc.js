@@ -2,14 +2,14 @@
 const TRANSFER_FEE = 139;
 const GOVERNMENT_FEE = 139;
 
-export default (config, landPrice, housePrice, savings, userStampDuty = null) => {    
+export default (config, landPrice, housePrice, savings, solicitorFees, userStampDuty = null) => {    
     const { LVR_RANGES, PRICE_RANGES, LMI_RANGES } = config;
     // Find property and LMI_RANGES range
     let lmiBracket;
     let found = false;
-    const propertyPrice = parseInt(landPrice) + parseInt(housePrice);
+    const propertyPrice = parseInt(landPrice) + parseInt(housePrice);    
     const stampDuty =  (userStampDuty !== null) ? parseInt(userStampDuty) : Math.round((((parseInt(landPrice) - 300001) * 4.5)/100)  + 8990);
-    const landFees = parseInt(stampDuty) + TRANSFER_FEE + GOVERNMENT_FEE;
+    const additionalFees = parseInt(stampDuty) + TRANSFER_FEE + GOVERNMENT_FEE + parseInt(solicitorFees);
     
     for (let i = 0; i < PRICE_RANGES.length; i++) {
         const [min, max] = PRICE_RANGES[i];
@@ -24,7 +24,7 @@ export default (config, landPrice, housePrice, savings, userStampDuty = null) =>
     if (!found) throw new RangeError('Invalid range');
 
     lmiBracket = lmiBracket || [];
-    const depositAmount = parseInt(savings) - landFees;
+    const depositAmount = parseInt(savings) - additionalFees;
     const depositPercent = Math.round((depositAmount / propertyPrice) * 100);    
     const loanRatio = Math.round((1 - (depositAmount / propertyPrice)) * 100); // equivalent of loan amount / gross property
 
