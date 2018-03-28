@@ -165,12 +165,12 @@ class App extends Component {
     return (
       <div className="App">
         <nav>
-          <div className="nav-wrapper indigo darken-2">
+          <div className="nav-wrapper blue">
             <a className="brand-logo center">Loan Planner</a>
           </div>
         </nav>
         
-        <div className="container" style={{ padding: '0 10%', backgroundColor: 'white' }}>
+        <div className="container" style={{ padding: '0 10%', backgroundColor: '#efefef' }}>
         
         <br/>
         <Modal
@@ -178,7 +178,7 @@ class App extends Component {
           bottomSheet
           trigger={
             <div className="fixed-action-btn" style={floatStyle}>
-              <a className="right absolute btn-floating btn-large waves-effect waves-light indigo darken-2"><i className="material-icons">add</i></a>
+              <a className="right absolute btn-floating btn-large waves-effect waves-light blue"><i className="material-icons">add</i></a>
             </div>
           }>
           <Row>
