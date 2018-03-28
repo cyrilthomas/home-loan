@@ -258,14 +258,25 @@ class App extends Component {
               <td>{savings}</td>
             </tr>
             
-            <tr>
-              <td>Land upfront booking amount</td>
-              <td>{upfrontLandBookingAmount}</td>
+            <tr onClick={() => this.upfrontDepositTable.style = { display: 'block' }}>
+              <td>Land upfront deposit amount</td>
+              <td>{(upfrontLandBookingAmount || 0) + (upfrontLandDepositAmount || 0)}</td>
             </tr>
 
-            <tr>
-              <td>Land upfront deposit amount</td>
-              <td>{upfrontLandDepositAmount}</td>
+            <tr ref={(o) => { this.upfrontDepositTable = o }} style={{ display: 'none' }}>
+            {upfrontLandDepositAmount && <Table className="highlight bordered">
+            <tbody>
+                <tr>
+                    <td>0.25% (-)</td>
+                    <td>{upfrontLandBookingAmount}</td>
+                </tr>
+                <tr>
+                    <td>{parseInt(landDepositPercent) - 0.25}% (-)</td>
+                    <td>{upfrontLandDepositAmount}</td>
+                </tr>
+              </tbody>
+            </Table>
+            }
             </tr>
 
             <tr>
