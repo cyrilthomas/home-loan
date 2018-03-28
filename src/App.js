@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { 
-  Input, Row,
-  Col, Table,
-  Modal, CollapsibleItem, 
+  Input, Row, Table, Modal
 } from 'react-materialize';
 import conf from './utils/config';
 import calc from './utils/loan-calc';
