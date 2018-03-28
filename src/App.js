@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { 
   Input, Row,
   Col, Table,
-  Modal
+  Modal, CollapsibleItem, 
 } from 'react-materialize';
 import conf from './utils/config';
 import calc from './utils/loan-calc';
@@ -275,13 +275,40 @@ class App extends Component {
               <td>{upfrontHouseDepositAmount}</td>
             </tr>            
 
-            <tr>
-                <td style={strong}>
+            <tr onClick={() => this.depositTable.style = { display: 'block' }}>
+              <td style={strong}>
                 Available Loan Deposit Amount<br/>
-                (adding 5 or 10 % deposit and any extras)</td>
-                <td style={strong}>{depositAmount || 'Unavailable'}</td>
+                (adding 5 or 10 % deposit and any extras)
+              </td>
+              <td style={strong}>{depositAmount || 'Unavailable'}</td>              
             </tr>
-
+            <tr ref={(o) => { this.depositTable = o }} style={{ display: 'none' }}>
+            {depositAmount && <Table className="highlight bordered">
+              <tbody>
+                <tr>
+                    <td>Savings (+)</td>
+                    <td>{savings}</td>
+                </tr>
+                <tr>
+                    <td>Stamp duty (-)</td>
+                    <td>{stampDuty}</td>
+                </tr>
+                <tr>
+                    <td>Fees (-)</td>
+                    <td>{governmentFee + transferFee}</td>
+                </tr>
+                <tr>
+                    <td>Solicitor Fees (-)</td>
+                    <td>{solicitorFees}</td>
+                </tr>
+                <tr>
+                    <td>Upfront Deposit (+)</td>
+                    <td>{upfrontLandBookingAmount + upfrontLandDepositAmount}</td>
+                </tr>
+              </tbody>
+              </Table>
+            }
+            </tr>
             {loanAmount &&
             <tr>
               <td>Loan Amount ({loanRatio}%)</td>
@@ -303,10 +330,27 @@ class App extends Component {
             </tr>
             }
 
-            <tr>
+            <tr onClick={() => this.loanTable.style = { display: 'block' }}>
               <td style={strong}>Loan Amount</td>
               <td style={strong}>{loanWithLmi || 'Unavailable'}</td>
             </tr>
+            <tr ref={(o) => { this.loanTable = o }} style={{ display: 'none' }}>
+            {loanWithLmi && <Table className="highlight bordered">
+              <tbody>
+                <tr>
+                    <td>Loan Amount (+)</td>
+                    <td>{loanAmount}</td>
+                </tr>
+                <tr>
+                    <td>LMI Amount (+)</td>
+                    <td>{lmiAmount}</td>
+                </tr>
+              </tbody>
+              </Table>
+            }
+            </tr>
+
+
           </tbody>
         </Table>      
         </div>
