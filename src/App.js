@@ -172,6 +172,23 @@ class App extends Component {
       upfrontHouseDepositAmount
     } = this.state;
 
+
+    const leftover = ((savings || 0) -
+      (stampDuty || 0) -
+      governmentFee -
+      transferFee -
+      solicitorFees -
+      (upfrontLandBookingAmount || 0) -
+      (upfrontLandDepositAmount || 0) -
+      (upfrontHouseDepositAmount || 0));
+
+
+    const combinedLeftoverDeposit = (
+      leftover +
+      (upfrontLandBookingAmount || 0) +
+      (upfrontLandDepositAmount || 0) +
+      (upfrontHouseDepositAmount || 0));
+
     return (
       <div className="App">
         <nav>
@@ -319,7 +336,27 @@ class App extends Component {
                 <tr>
                     <td>Solicitor Fees (-)</td>
                     <td>{solicitorFees}</td>
+                </tr>                
+                
+                <tr>
+                    <td>Upfront deposits (-)</td>
+                    <td>{
+                      (upfrontLandBookingAmount || 0) +
+                      (upfrontLandDepositAmount || 0) +
+                      (upfrontHouseDepositAmount || 0)
+                    }</td>
                 </tr>
+
+                <tr>
+                    <td>Leftover savings (+)</td>
+                    <td>{leftover}</td>
+                </tr>
+
+                <tr>
+                    <td>Total deposit (+)</td>
+                    <td>{combinedLeftoverDeposit}</td>
+                </tr>
+
               </tbody>
               </Table>
             }
