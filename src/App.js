@@ -141,6 +141,16 @@ class App extends Component {
     }
   }
 
+  toggleView(el) {
+    if (el.style.display === 'block') {
+      el.style.display = 'none';
+      return;
+    }
+    
+    el.style.display = 'block';
+    return;
+  }
+
   render() {
     const { landPrice, landDepositPercent, houseDepositPercent, housePrice, savings, solicitorFees, userStampDuty } = this.form;
     
@@ -209,7 +219,7 @@ class App extends Component {
         </Row>
 
         <Row>        
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('stampDuty')} label="Stamp Duty" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('stampDuty')} label="Stamp Duty (optional)" />
         </Row>
         
         <Row>        
@@ -258,8 +268,8 @@ class App extends Component {
               <td>{savings}</td>
             </tr>
             
-            <tr onClick={() => this.upfrontDepositTable.style = { display: 'block' }}>
-              <td>Land upfront deposit amount</td>
+            <tr onClick={() => this.toggleView(this.upfrontDepositTable)}>
+              <td>+ Land upfront deposit amount</td>
               <td>{(upfrontLandBookingAmount || 0) + (upfrontLandDepositAmount || 0)}</td>
             </tr>
 
@@ -284,9 +294,9 @@ class App extends Component {
               <td>{upfrontHouseDepositAmount}</td>
             </tr>            
 
-            <tr onClick={() => this.depositTable.style = { display: 'block' }}>
+            <tr onClick={() => this.toggleView(this.depositTable)}>
               <td style={strong}>
-                Available Loan Deposit Amount<br/>
+                + Available Loan Deposit Amount<br/>
                 (incl. 5 - 10 % deposit + any extras)
               </td>
               <td style={strong}>{depositAmount || 'Unavailable'}</td>              
@@ -335,8 +345,8 @@ class App extends Component {
             </tr>
             }
 
-            <tr onClick={() => this.loanTable.style = { display: 'block' }}>
-              <td style={strong}>Loan Amount</td>
+            <tr onClick={() => this.toggleView(this.loanTable)}>
+              <td style={strong}>+ Loan Amount</td>
               <td style={strong}>{loanWithLmi || 'Unavailable'}</td>
             </tr>
             <tr ref={(o) => { this.loanTable = o }} style={{ display: 'none' }}>
