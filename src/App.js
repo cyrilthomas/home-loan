@@ -170,7 +170,7 @@ class App extends Component {
           </div>
         </nav>
         
-        <div className="container" style={{ padding: '0 2%', backgroundColor: 'white', color: '#a9a9a9' }}>
+        <div className="container" style={{ padding: '0 2%', marginTop: '1%', marginBottom: '1%', backgroundColor: 'white', color: '#a9a9a9' }}>
         
         <br/>
         <Modal
