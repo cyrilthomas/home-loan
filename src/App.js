@@ -141,13 +141,17 @@ class App extends Component {
     }
   }
 
-  toggleView(el) {
+  toggleView(el, plus, minus) {
     if (el.style.display === 'block') {
       el.style.display = 'none';
+      plus.style.display = 'inline';
+      minus.style.display = 'none';
       return;
     }
     
     el.style.display = 'block';
+    plus.style.display = 'none';
+    minus.style.display = 'inline';
     return;
   }
 
@@ -285,8 +289,11 @@ class App extends Component {
               <td>{savings}</td>
             </tr>
             
-            <tr onClick={() => this.toggleView(this.upfrontDepositTable)}>
-              <td>+ Land upfront deposit amount</td>
+            <tr onClick={() => this.toggleView(this.upfrontDepositTable, this.upfrontDepositTablePlus, this.upfrontDepositTableMinus)}>
+              <td>
+                <span ref={(r) => this.upfrontDepositTablePlus = r } style={{display: 'inline'}}>+ </span>
+                <span ref={(r) => this.upfrontDepositTableMinus = r } style={{display: 'none'}}>- </span>
+                Land upfront deposit amount</td>
               <td>{(upfrontLandBookingAmount || 0) + (upfrontLandDepositAmount || 0)}</td>
             </tr>
 
@@ -311,9 +318,11 @@ class App extends Component {
               <td>{upfrontHouseDepositAmount}</td>
             </tr>            
 
-            <tr onClick={() => this.toggleView(this.depositTable)}>
+            <tr onClick={() => this.toggleView(this.depositTable, this.depositTablePlus, this.depositTableMinus)}>
               <td style={strong}>
-                + Available Loan Deposit Amount<br/>
+                <span ref={(r) => this.depositTablePlus = r } style={{display: 'inline'}}>+ </span>
+                <span ref={(r) => this.depositTableMinus = r } style={{display: 'none'}}>- </span>
+                Available Loan Deposit Amount<br/>
                 (incl. 5 - 10 % deposit + any extras)
               </td>
               <td style={strong}>{depositAmount || 'Unavailable'}</td>              
@@ -382,8 +391,10 @@ class App extends Component {
             </tr>
             }
 
-            <tr onClick={() => this.toggleView(this.loanTable)}>
-              <td style={strong}>+ Loan Amount</td>
+            <tr onClick={() => this.toggleView(this.loanTable, this.loanTablePlus, this.loanTableMinus)}>
+              <td style={strong}>
+                <span ref={(r) => this.loanTablePlus = r } style={{display: 'inline'}}>+ </span>
+                <span ref={(r) => this.loanTableMinus = r } style={{display: 'none'}}>- </span>Loan Amount</td>
               <td style={strong}>{loanWithLmi || 'Unavailable'}</td>
             </tr>
             <tr ref={(o) => { this.loanTable = o }} style={{ display: 'none' }}>
