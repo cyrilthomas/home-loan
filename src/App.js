@@ -11,6 +11,7 @@ const strong = {
 };
 
 const fontSize = { fontSize: '16px' };
+const theme = {backgroundColor: '#ee6e73'};
 const redStyle = { backgroundColor: '#f04242' };
 const blueStyle = { backgroundColor: '#241e4e' };
 const greyStyle = { backgroundColor: '#efefef' };
@@ -196,12 +197,12 @@ class App extends Component {
     return (
       <div className="App">
         <nav>
-          <div className="nav-wrapper light-blue accent-4">
+          <div className="nav-wrapper" style={theme}>
             <a className="brand-logo center">Loan Planner</a>
           </div>
         </nav>
         
-        <div className="container" style={{ padding: '0 2%', marginTop: '1%', marginBottom: '1%', backgroundColor: 'white', color: '#a9a9a9' }}>
+        <div className="container" style={{ padding: '0 2%', marginTop: '1%', marginBottom: '1%', backgroundColor: 'white', color: '#828181' }}>
         
         <br/>
         <Modal
@@ -209,7 +210,7 @@ class App extends Component {
           bottomSheet
           trigger={
             <div className="fixed-action-btn" style={floatStyle}>
-              <a className="right absolute btn-floating btn-large waves-effect waves-light light-blue accent-4"><i className="material-icons">add</i></a>
+              <a className="right absolute btn-floating btn-large waves-effect waves-light" style={theme}><i className="material-icons tiny">add</i></a>
             </div>
           }>
           <Row>
@@ -291,8 +292,8 @@ class App extends Component {
             
             <tr onClick={() => this.toggleView(this.upfrontDepositTable, this.upfrontDepositTablePlus, this.upfrontDepositTableMinus)}>
               <td style={strong}>
-                <span ref={(r) => this.upfrontDepositTablePlus = r } style={{display: 'inline'}}>+ </span>
-                <span ref={(r) => this.upfrontDepositTableMinus = r } style={{display: 'none'}}>- </span>
+                <i ref={(r) => this.upfrontDepositTablePlus = r } className="material-icons tiny">expand_more</i>
+                <i ref={(r) => this.upfrontDepositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
                 Land upfront deposit amount</td>
               <td>{(upfrontLandBookingAmount || 0) + (upfrontLandDepositAmount || 0)}</td>
             </tr>
@@ -320,8 +321,8 @@ class App extends Component {
 
             <tr onClick={() => this.toggleView(this.depositTable, this.depositTablePlus, this.depositTableMinus)}>
               <td style={strong}>
-                <span ref={(r) => this.depositTablePlus = r } style={{display: 'inline'}}>+ </span>
-                <span ref={(r) => this.depositTableMinus = r } style={{display: 'none'}}>- </span>
+                <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny">expand_more</i>
+                <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
                 Available Loan Deposit Amount<br/>
                 (incl. 5 - 10 % deposit + any extras)
               </td>
@@ -393,8 +394,9 @@ class App extends Component {
 
             <tr onClick={() => this.toggleView(this.loanTable, this.loanTablePlus, this.loanTableMinus)}>
               <td style={strong}>
-                <span ref={(r) => this.loanTablePlus = r } style={{display: 'inline'}}>+ </span>
-                <span ref={(r) => this.loanTableMinus = r } style={{display: 'none'}}>- </span>Final Loan Amount</td>
+                <i ref={(r) => this.loanTablePlus = r } className="material-icons tiny">expand_more</i>
+                <i ref={(r) => this.loanTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
+                Final Loan Amount</td>
               <td style={strong}>{loanWithLmi || 'Unavailable'}</td>
             </tr>
             <tr ref={(o) => { this.loanTable = o }} style={{ display: 'none' }}>
