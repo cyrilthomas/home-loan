@@ -290,7 +290,7 @@ class App extends Component {
             </tr>
             
             <tr onClick={() => this.toggleView(this.upfrontDepositTable, this.upfrontDepositTablePlus, this.upfrontDepositTableMinus)}>
-              <td>
+              <td style={strong}>
                 <span ref={(r) => this.upfrontDepositTablePlus = r } style={{display: 'inline'}}>+ </span>
                 <span ref={(r) => this.upfrontDepositTableMinus = r } style={{display: 'none'}}>- </span>
                 Land upfront deposit amount</td>
@@ -394,7 +394,7 @@ class App extends Component {
             <tr onClick={() => this.toggleView(this.loanTable, this.loanTablePlus, this.loanTableMinus)}>
               <td style={strong}>
                 <span ref={(r) => this.loanTablePlus = r } style={{display: 'inline'}}>+ </span>
-                <span ref={(r) => this.loanTableMinus = r } style={{display: 'none'}}>- </span>Loan Amount</td>
+                <span ref={(r) => this.loanTableMinus = r } style={{display: 'none'}}>- </span>Final Loan Amount</td>
               <td style={strong}>{loanWithLmi || 'Unavailable'}</td>
             </tr>
             <tr ref={(o) => { this.loanTable = o }} style={{ display: 'none' }}>
