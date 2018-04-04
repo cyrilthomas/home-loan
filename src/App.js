@@ -11,7 +11,7 @@ const strong = {
 };
 
 const fontSize = { fontSize: '16px' };
-const theme = {backgroundColor: '#ee6e73'};
+const theme = {backgroundColor: '#1A8CFF'};
 const redStyle = { backgroundColor: '#f04242' };
 const blueStyle = { backgroundColor: '#241e4e' };
 const greyStyle = { backgroundColor: '#efefef' };
