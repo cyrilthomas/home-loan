@@ -362,8 +362,8 @@ class App extends Component {
                     <td>{leftover}</td>
                 </tr>
 
-                <tr>
-                    <td>Total deposit (+)</td>
+                <tr style={strong}>
+                    <td>Total deposit</td>
                     <td>{combinedLeftoverDeposit}</td>
                 </tr>
 
