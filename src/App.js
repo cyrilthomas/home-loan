@@ -210,7 +210,7 @@ class App extends Component {
           bottomSheet
           trigger={
             <div className="fixed-action-btn" style={floatStyle}>
-              <a className="right absolute btn-floating btn-large waves-effect waves-light" style={theme}><i className="material-icons tiny">add</i></a>
+              <a className="right absolute btn-floating btn-large waves-effect waves-light" style={theme}><i className="material-icons tiny">tune</i></a>
             </div>
           }>
           <Row>
