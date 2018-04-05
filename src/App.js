@@ -332,7 +332,7 @@ class App extends Component {
             {depositAmount && <Table className="highlight bordered">
               <tbody>
                 <tr>
-                    <td>Savings (+)</td>
+                    <td>Available Savings</td>
                     <td>{savings}</td>
                 </tr>
                 <tr>
