@@ -28,9 +28,14 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
     if (!found) throw new RangeError('Invalid range');
 
     lmiBracket = lmiBracket || [];
+    const propertyDeposit = (
+        upfrontLandBookingAmount +
+        upfrontLandDepositAmount +
+        upfrontHouseDepositAmount
+    );
     const depositAmount = parseInt(savings) - additionalFees;
-    const depositPercent = Math.round((depositAmount / propertyPrice) * 100);    
-    const loanRatio = Math.round((1 - (depositAmount / propertyPrice)) * 100); // equivalent of loan amount / gross property
+    const depositPercent = Math.round((propertyDeposit / propertyPrice) * 100);    
+    const loanRatio = Math.round((1 - (propertyDeposit / propertyPrice)) * 100); // equivalent of loan amount / gross property
 
     let lmiPercent;
     for (let j = 0; j < LVR_RANGES.length; j++) {
@@ -42,27 +47,43 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
     }
     
     lmiPercent = lmiPercent || 0;    
-    const loanAmount = (propertyPrice - depositAmount);
+    
+    const upfrontDeposits = (
+        upfrontLandBookingAmount +
+        upfrontLandDepositAmount +
+        upfrontHouseDepositAmount
+    );
+    const loanAmount = (propertyPrice - upfrontDeposits);
     const lmiAmount = Math.round(loanAmount * (lmiPercent / 100));
-    const loanWithLmi = loanAmount + lmiAmount;
+    const finalDepositAmount = depositAmount - lmiAmount;
+    const loanWithLmi = propertyPrice - finalDepositAmount; // loan amount after upfront lmi payment
     // const lvrPercent = Math.round((1 - (depositAmount / loanWithLmi)) * 100);
     const lvrPercent = Math.round((loanWithLmi / propertyPrice) * 100);
+    const finalLoanAmount = loanAmount - lmiAmount;
+    const leftoverSavings = (
+        parseInt(savings) -
+        additionalFees -
+        lmiAmount -
+        upfrontDeposits
+    );
 
     return {
         transferFee: TRANSFER_FEE,
         governmentFee: GOVERNMENT_FEE,
-        depositAmount,
+        depositAmount: finalDepositAmount,
         propertyPrice,
         depositPercent,
         loanRatio, 
         lmiPercent,
         lmiAmount,
         loanAmount,
-        loanWithLmi,
+        loanWithLmi: finalLoanAmount,
         lvrPercent,
         stampDuty,
         upfrontLandBookingAmount,
         upfrontLandDepositAmount,
-        upfrontHouseDepositAmount
+        upfrontHouseDepositAmount,
+        upfrontDeposits,
+        leftoverSavings
     };
 };

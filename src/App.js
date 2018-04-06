@@ -127,7 +127,9 @@ class App extends Component {
         lvrPercent,
         upfrontLandBookingAmount,
         upfrontLandDepositAmount,
-        upfrontHouseDepositAmount        
+        upfrontHouseDepositAmount,
+        upfrontDeposits,
+        leftoverSavings
       } = calc(config, landPrice, housePrice, savings, solicitorFees, landDepositPercent, houseDepositPercent, userStampDuty);
       
       this.setState({
@@ -135,7 +137,8 @@ class App extends Component {
         propertyPrice, savings, depositAmount, depositPercent,
         loanRatio, lmiPercent, lmiAmount,
         loanAmount, loanWithLmi, lvrPercent,
-        upfrontLandBookingAmount, upfrontLandDepositAmount, upfrontHouseDepositAmount
+        upfrontLandBookingAmount, upfrontLandDepositAmount, upfrontHouseDepositAmount,
+        upfrontDeposits, leftoverSavings
       });
     } catch (err) {
       console.log('Invalid input', err);
@@ -174,25 +177,10 @@ class App extends Component {
       lvrPercent,
       upfrontLandBookingAmount,
       upfrontLandDepositAmount,
-      upfrontHouseDepositAmount
+      upfrontHouseDepositAmount,
+      upfrontDeposits,
+      leftoverSavings
     } = this.state;
-
-
-    const leftover = ((savings || 0) -
-      (stampDuty || 0) -
-      governmentFee -
-      transferFee -
-      solicitorFees -
-      (upfrontLandBookingAmount || 0) -
-      (upfrontLandDepositAmount || 0) -
-      (upfrontHouseDepositAmount || 0));
-
-
-    const combinedLeftoverDeposit = (
-      leftover +
-      (upfrontLandBookingAmount || 0) +
-      (upfrontLandDepositAmount || 0) +
-      (upfrontHouseDepositAmount || 0));
 
     return (
       <div className="App">
@@ -288,7 +276,7 @@ class App extends Component {
             <tr>
               <td>Savings</td>
               <td>{savings}</td>
-            </tr>
+            </tr>            
             
             <tr onClick={() => this.toggleView(this.upfrontDepositTable, this.upfrontDepositTablePlus, this.upfrontDepositTableMinus)}>
               <td style={strong}>
@@ -323,10 +311,9 @@ class App extends Component {
               <td style={strong}>
                 <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny">expand_more</i>
                 <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
-                Available Loan Deposit Amount<br/>
-                (incl. 5 - 10 % deposit + any extras)
+                Additional cash in hand<br/>
               </td>
-              <td style={strong}>{depositAmount || 'Unavailable'}</td>              
+              <td style={strong}>{leftoverSavings || 'Unavailable'}</td>
             </tr>
             <tr ref={(o) => { this.depositTable = o }} style={{ display: 'none' }}>
             {depositAmount && <Table className="highlight bordered">
@@ -335,6 +322,11 @@ class App extends Component {
                     <td>Available Savings</td>
                     <td>{savings}</td>
                 </tr>
+                
+                <th>
+                  <div>Out of hand expenses</div>
+                </th>
+                
                 <tr>
                     <td>Stamp duty (-)</td>
                     <td>{stampDuty}</td>
@@ -347,26 +339,25 @@ class App extends Component {
                     <td>Solicitor Fees (-)</td>
                     <td>{solicitorFees}</td>
                 </tr>                
-                
-                <tr>
-                    <td>Upfront deposits (-)</td>
-                    <td>{
-                      (upfrontLandBookingAmount || 0) +
-                      (upfrontLandDepositAmount || 0) +
-                      (upfrontHouseDepositAmount || 0)
-                    }</td>
-                </tr>
 
                 <tr>
-                    <td>Leftover savings (+)</td>
-                    <td>{leftover}</td>
+                    <td>LMI compensation (-)</td>
+                    <td>{lmiAmount}</td>
+                </tr>
+                
+                <th>
+                  <div>Property contributions</div>
+                </th>
+
+                <tr>
+                    <td>Upfront deposits</td>
+                    <td>{upfrontDeposits}</td>
                 </tr>
 
                 <tr style={strong}>
-                    <td>Total deposit</td>
-                    <td>{combinedLeftoverDeposit}</td>
+                    <td>Additional cash</td>
+                    <td>{leftoverSavings}</td>
                 </tr>
-
               </tbody>
               </Table>
             }
@@ -392,13 +383,14 @@ class App extends Component {
             </tr>
             }
 
-            <tr onClick={() => this.toggleView(this.loanTable, this.loanTablePlus, this.loanTableMinus)}>
+            {loanWithLmi && <tr onClick={() => this.toggleView(this.loanTable, this.loanTablePlus, this.loanTableMinus)}>
               <td style={strong}>
                 <i ref={(r) => this.loanTablePlus = r } className="material-icons tiny">expand_more</i>
                 <i ref={(r) => this.loanTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
-                Final Loan Amount</td>
+                Final Loan Amount ({lvrPercent}%)</td>
               <td style={strong}>{loanWithLmi || 'Unavailable'}</td>
             </tr>
+            }
             <tr ref={(o) => { this.loanTable = o }} style={{ display: 'none' }}>
             {loanWithLmi && <Table className="highlight bordered">
               <tbody>
