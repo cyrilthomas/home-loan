@@ -33,39 +33,59 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
         upfrontLandDepositAmount +
         upfrontHouseDepositAmount
     );
-    const depositAmount = parseInt(savings) - additionalFees;
-    const depositPercent = Math.round((propertyDeposit / propertyPrice) * 100);    
-    const loanRatio = Math.round((1 - (propertyDeposit / propertyPrice)) * 100); // equivalent of loan amount / gross property
-
-    let lmiPercent;
-    for (let j = 0; j < LVR_RANGES.length; j++) {
-        const [min, max] = LVR_RANGES[j];
-        if (loanRatio >= min && loanRatio <= max) {
-            lmiPercent = lmiBracket[j];          
-            break;
-        }
-    }
     
-    lmiPercent = lmiPercent || 0;    
-    
-    const upfrontDeposits = (
+    let upfrontDeposits = (
         upfrontLandBookingAmount +
         upfrontLandDepositAmount +
         upfrontHouseDepositAmount
     );
-    const loanAmount = (propertyPrice - upfrontDeposits);
-    const lmiAmount = Math.round(loanAmount * (lmiPercent / 100));
-    const finalDepositAmount = depositAmount - lmiAmount;
-    const loanWithLmi = propertyPrice - finalDepositAmount; // loan amount after upfront lmi payment
-    // const lvrPercent = Math.round((1 - (depositAmount / loanWithLmi)) * 100);
-    const lvrPercent = Math.round((loanWithLmi / propertyPrice) * 100);
-    const finalLoanAmount = loanAmount - lmiAmount;
-    const leftoverSavings = (
-        parseInt(savings) -
-        additionalFees -
-        lmiAmount -
-        upfrontDeposits
-    );
+    
+    if (!savings) throw new RangeError('Invalid range');
+
+    let lmiPercent;
+    let depositPercent;
+    let loanRatio;
+    let loanAmount;
+    let lmiAmount;
+    let finalDepositAmount;
+    let loanWithLmi;
+    let lvrPercent;
+    let finalLoanAmount;
+    let leftoverSavings = 0;
+    let upfrontDepositCalculation = `${upfrontDeposits}`;
+
+    while (true) {
+        const depositAmount = parseInt(savings) - additionalFees;
+        depositPercent = Math.round((upfrontDeposits / propertyPrice) * 100);    
+        loanRatio = Math.round((1 - (upfrontDeposits / propertyPrice)) * 100); // equivalent of loan amount / gross property
+    
+        for (let j = 0; j < LVR_RANGES.length; j++) {
+            const [min, max] = LVR_RANGES[j];
+            if (loanRatio >= min && loanRatio <= max) {
+                lmiPercent = lmiBracket[j];          
+                break;
+            }
+        }
+        
+        lmiPercent = lmiPercent || 0;    
+
+        loanAmount = (propertyPrice - upfrontDeposits);
+        lmiAmount = Math.round(loanAmount * (lmiPercent / 100));
+        finalDepositAmount = depositAmount - lmiAmount;
+        loanWithLmi = loanAmount - lmiAmount; // loan amount after upfront lmi payment
+        lvrPercent = Math.round((loanWithLmi / propertyPrice) * 100);
+        finalLoanAmount = loanAmount - lmiAmount;
+        leftoverSavings = (
+            parseInt(savings) -
+            additionalFees -
+            lmiAmount -
+            upfrontDeposits
+        );
+        console.log('Left over', leftoverSavings);
+        upfrontDeposits += leftoverSavings;
+        if (leftoverSavings <= 0) break;
+        upfrontDepositCalculation += ` + ${leftoverSavings}`;
+    }
 
     return {
         transferFee: TRANSFER_FEE,
@@ -84,6 +104,7 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
         upfrontLandDepositAmount,
         upfrontHouseDepositAmount,
         upfrontDeposits,
+        upfrontDepositCalculation,
         leftoverSavings
     };
 };

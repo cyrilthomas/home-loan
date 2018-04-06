@@ -129,7 +129,8 @@ class App extends Component {
         upfrontLandDepositAmount,
         upfrontHouseDepositAmount,
         upfrontDeposits,
-        leftoverSavings
+        upfrontDepositCalculation,
+        leftoverSavings,
       } = calc(config, landPrice, housePrice, savings, solicitorFees, landDepositPercent, houseDepositPercent, userStampDuty);
       
       this.setState({
@@ -138,7 +139,7 @@ class App extends Component {
         loanRatio, lmiPercent, lmiAmount,
         loanAmount, loanWithLmi, lvrPercent,
         upfrontLandBookingAmount, upfrontLandDepositAmount, upfrontHouseDepositAmount,
-        upfrontDeposits, leftoverSavings
+        upfrontDeposits, upfrontDepositCalculation, leftoverSavings
       });
     } catch (err) {
       console.log('Invalid input', err);
@@ -178,6 +179,7 @@ class App extends Component {
       upfrontLandBookingAmount,
       upfrontLandDepositAmount,
       upfrontHouseDepositAmount,
+      upfrontDepositCalculation,
       upfrontDeposits,
       leftoverSavings
     } = this.state;
@@ -311,9 +313,9 @@ class App extends Component {
               <td style={strong}>
                 <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny">expand_more</i>
                 <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
-                Additional cash in hand<br/>
+                Contributed deposits<br/>
               </td>
-              <td style={strong}>{leftoverSavings || 'Unavailable'}</td>
+              <td style={strong}>{upfrontDeposits || 'Unavailable'}</td>
             </tr>
             <tr ref={(o) => { this.depositTable = o }} style={{ display: 'none' }}>
             {depositAmount && <Table className="highlight bordered">
@@ -349,15 +351,13 @@ class App extends Component {
                   <div>Property contributions</div>
                 </th>
 
-                <tr>
-                    <td>Upfront deposits</td>
-                    <td>{upfrontDeposits}</td>
-                </tr>
+                {upfrontDepositCalculation.split(' + ').map((dep, index) => 
+                  <tr>
+                      <td>{index === 0 ? 'Deposit' : 'Savings'} (+)</td>
+                      <td>{dep}</td>
+                  </tr>
+                )}
 
-                <tr style={strong}>
-                    <td>Additional cash</td>
-                    <td>{leftoverSavings}</td>
-                </tr>
               </tbody>
               </Table>
             }
@@ -373,13 +373,6 @@ class App extends Component {
             <tr>
               <td>LMI Amount ({lmiPercent}%)</td>
               <td>{lmiAmount}</td>
-            </tr>
-            }
-            
-            {lvrPercent &&
-            <tr>
-              <td>LVR %</td>
-              <td>{lvrPercent}</td>
             </tr>
             }
 
