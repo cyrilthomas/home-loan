@@ -53,6 +53,7 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
     let finalLoanAmount;
     let leftoverSavings = 0;
     let upfrontDepositCalculation = `${upfrontDeposits}`;
+    let first = true;
 
     while (true) {
         const depositAmount = parseInt(savings) - additionalFees;
@@ -81,10 +82,14 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
             lmiAmount -
             upfrontDeposits
         );
-        console.log('Left over', leftoverSavings);
-        upfrontDeposits += leftoverSavings;
+        console.log('Left over', leftoverSavings);        
+        if (first && leftoverSavings < 0) {            
+            throw new Error(`Insufficient funds need ${leftoverSavings}`);
+        }
+        first = false;        
         if (leftoverSavings <= 0) break;
         upfrontDepositCalculation += ` + ${leftoverSavings}`;
+        upfrontDeposits += leftoverSavings;
     }
 
     return {
