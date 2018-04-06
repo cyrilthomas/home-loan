@@ -315,7 +315,7 @@ class App extends Component {
                 <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
                 Contributed deposits<br/>
               </td>
-              <td style={strong}>{upfrontDeposits || 'Unavailable'}</td>
+              <td style={strong}>{(lmiAmount + upfrontDeposits) || 'Unavailable'}</td>
             </tr>
             <tr ref={(o) => { this.depositTable = o }} style={{ display: 'none' }}>
             {depositAmount && <Table className="highlight bordered">
@@ -341,11 +341,6 @@ class App extends Component {
                     <td>Solicitor Fees (-)</td>
                     <td>{solicitorFees}</td>
                 </tr>                
-
-                <tr>
-                    <td>LMI compensation (-)</td>
-                    <td>{lmiAmount}</td>
-                </tr>
                 
                 <th>
                   <div>Property contributions</div>
@@ -357,6 +352,11 @@ class App extends Component {
                       <td>{dep}</td>
                   </tr>
                 )}
+
+                <tr>
+                    <td>LMI compensation (+)</td>
+                    <td>{lmiAmount}</td>
+                </tr>
 
               </tbody>
               </Table>
