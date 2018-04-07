@@ -346,7 +346,7 @@ class App extends Component {
                   <div>Property contributions</div>
                 </th>
 
-                {upfrontDepositCalculation.map(([ratio, dep], index) => 
+                {upfrontDepositCalculation.map(([ratio, lmi, dep], index) => 
                   <tr>
                       <td>{index === 0 ? 'Deposit' : `Savings @${ratio}% loan`} (+)</td>
                       <td>{dep}</td>

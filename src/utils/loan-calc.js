@@ -53,7 +53,7 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
     let finalLoanAmount;
     let leftoverSavings = 0;
     loanRatio = Math.round((1 - (upfrontDeposits / propertyPrice)) * 100);
-    let upfrontDepositCalculation = [[loanRatio, upfrontDeposits]];
+    let upfrontDepositCalculation = [[null, null, upfrontDeposits]];
     let first = true;
 
     while (true) {
@@ -89,7 +89,7 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
         }
         first = false;        
         if (leftoverSavings <= 0) break;
-        upfrontDepositCalculation.push([loanRatio, leftoverSavings]);
+        upfrontDepositCalculation.push([loanRatio, lmiAmount, leftoverSavings]);
         upfrontDeposits += leftoverSavings;
     }
 
