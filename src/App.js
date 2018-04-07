@@ -280,8 +280,8 @@ class App extends Component {
               <td>{savings}</td>
             </tr>            
             
-            <tr onClick={() => this.toggleView(this.upfrontDepositTable, this.upfrontDepositTablePlus, this.upfrontDepositTableMinus)}>
-              <td style={strong}>
+            <tr style={strong} onClick={() => this.toggleView(this.upfrontDepositTable, this.upfrontDepositTablePlus, this.upfrontDepositTableMinus)}>
+              <td>
                 <i ref={(r) => this.upfrontDepositTablePlus = r } className="material-icons tiny">expand_more</i>
                 <i ref={(r) => this.upfrontDepositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
                 Land upfront deposit amount</td>
