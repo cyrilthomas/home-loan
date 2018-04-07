@@ -74,7 +74,7 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
         lmiAmount = Math.round(loanAmount * (lmiPercent / 100));
         finalDepositAmount = depositAmount - lmiAmount;
         loanWithLmi = loanAmount - lmiAmount; // loan amount after upfront lmi payment
-        lvrPercent = Math.round((loanWithLmi / propertyPrice) * 100);
+        lvrPercent = ((loanWithLmi / propertyPrice) * 100).toPrecision(4);
         finalLoanAmount = loanAmount - lmiAmount;
         leftoverSavings = (
             parseInt(savings) -

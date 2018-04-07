@@ -204,7 +204,7 @@ class App extends Component {
             </div>
           }>
           <Row>
-          <Input s={3} type='select' label="Pick LMI rate" defaultValue="default" onChange={this.update('configChange')}>
+          <Input s={2} type='select' label="Pick LMI rate" defaultValue="default" onChange={this.update('configChange')}>
             <option value='default'>Default</option>
             <option value='westpac'>Westpac</option>
           </Input>
@@ -280,11 +280,12 @@ class App extends Component {
               <td>{savings}</td>
             </tr>            
             
-            <tr style={strong} onClick={() => this.toggleView(this.upfrontDepositTable, this.upfrontDepositTablePlus, this.upfrontDepositTableMinus)}>
-              <td>
+            <tr onClick={() => this.toggleView(this.upfrontDepositTable, this.upfrontDepositTablePlus, this.upfrontDepositTableMinus)}>
+              <td>                
+                Land upfront deposit amount
                 <i ref={(r) => this.upfrontDepositTablePlus = r } className="material-icons tiny">expand_more</i>
                 <i ref={(r) => this.upfrontDepositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
-                Land upfront deposit amount</td>
+              </td>
               <td>{(upfrontLandBookingAmount || 0) + (upfrontLandDepositAmount || 0)}</td>
             </tr>
 
@@ -310,10 +311,10 @@ class App extends Component {
             </tr>            
 
             <tr onClick={() => this.toggleView(this.depositTable, this.depositTablePlus, this.depositTableMinus)}>
-              <td style={strong}>
+              <td style={strong}>                
+                Deposits and payments
                 <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny">expand_more</i>
                 <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
-                Deposits and payments<br/>
               </td>
               <td style={strong}>{(lmiAmount + upfrontDeposits) || 'Unavailable'}</td>
             </tr>
@@ -363,8 +364,8 @@ class App extends Component {
             }
             </tr>
             {loanAmount &&
-            <tr>
-              <td>Loan amount ({loanRatio}%)</td>
+            <tr style={strong}>
+              <td>Loan amount including LMI ({loanRatio}%)</td>
               <td>{loanAmount}</td>
             </tr>
             }
@@ -377,10 +378,11 @@ class App extends Component {
             }
 
             {loanWithLmi && <tr onClick={() => this.toggleView(this.loanTable, this.loanTablePlus, this.loanTableMinus)}>
-              <td style={strong}>
+              <td style={strong}>                
+                Loan Amount without including LMI ({lvrPercent}%)
                 <i ref={(r) => this.loanTablePlus = r } className="material-icons tiny">expand_more</i>
                 <i ref={(r) => this.loanTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
-                Final Loan Amount ({lvrPercent}%)</td>
+              </td>
               <td style={strong}>{loanWithLmi || 'Unavailable'}</td>
             </tr>
             }
@@ -392,7 +394,7 @@ class App extends Component {
                     <td>{loanAmount}</td>
                 </tr>
                 <tr>
-                    <td>LMI amount (+)</td>
+                    <td>LMI amount (-)</td>
                     <td>{lmiAmount}</td>
                 </tr>
               </tbody>
