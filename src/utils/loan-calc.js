@@ -21,6 +21,7 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
         if (propertyPrice >= min && propertyPrice <= max) {        
             lmiBracket = LMI_RANGES[i];
             found = true;
+            console.log('lmiBracket', lmiBracket);
             break;
         }
     }
@@ -34,14 +35,16 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
         upfrontHouseDepositAmount
     );
     const depositAmount = parseInt(savings) - additionalFees;
-    const depositPercent = Math.round((propertyDeposit / propertyPrice) * 100);    
-    const loanRatio = Math.round((1 - (propertyDeposit / propertyPrice)) * 100); // equivalent of loan amount / gross property
+    const depositPercent = Math.round((depositAmount / propertyPrice) * 100);    
+    const loanRatio = ((1 - (depositAmount / propertyPrice)) * 100).toPrecision(4); // equivalent of loan amount / gross property
 
+    console.log('loanRatio', loanRatio);
     let lmiPercent;
     for (let j = 0; j < LVR_RANGES.length; j++) {
         const [min, max] = LVR_RANGES[j];
         if (loanRatio >= min && loanRatio <= max) {
-            lmiPercent = lmiBracket[j];          
+            lmiPercent = lmiBracket[j];
+            console.log('lmiPercent', lmiPercent);
             break;
         }
     }
@@ -53,7 +56,8 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
         upfrontLandDepositAmount +
         upfrontHouseDepositAmount
     );
-    const loanAmount = (propertyPrice - upfrontDeposits);
+    const loanAmount = (propertyPrice - depositAmount);
+    console.log('loanAmount', loanAmount);
     const lmiAmount = Math.round(loanAmount * (lmiPercent / 100));
     const finalDepositAmount = depositAmount - lmiAmount;
     const loanWithLmi = propertyPrice - finalDepositAmount; // loan amount after upfront lmi payment
