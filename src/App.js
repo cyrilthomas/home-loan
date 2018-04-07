@@ -188,7 +188,7 @@ class App extends Component {
       <div className="App">
         <nav>
           <div className="nav-wrapper" style={theme}>
-            <a className="brand-logo center">Loan Planner</a>
+            <a className="brand-logo center">LOAN PLANNER</a>
           </div>
         </nav>
         
@@ -204,18 +204,18 @@ class App extends Component {
             </div>
           }>
           <Row>
-          <Input s={3} type='select' label="Pick LMI Rate" defaultValue="default" onChange={this.update('configChange')}>
+          <Input s={3} type='select' label="Pick LMI rate" defaultValue="default" onChange={this.update('configChange')}>
             <option value='default'>Default</option>
             <option value='westpac'>Westpac</option>
           </Input>
         </Row>
       
         <Row>
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('landPriceChange')} label="Land Price" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('landPriceChange')} label="Land price" />
         </Row>
 
         <Row>
-          <Input type="number" step="5" style={fontSize} onChange={this.update('landDepositPercentChange')} label="Land Deposit %" />
+          <Input type="number" step="5" style={fontSize} onChange={this.update('landDepositPercentChange')} label="Land deposit %" />
         </Row>
                 
         <Row>
@@ -223,7 +223,7 @@ class App extends Component {
         </Row>
 
         <Row>
-          <Input type="number" step="5" style={fontSize} onChange={this.update('houseDepositPercentChange')} label="House Deposit %" />
+          <Input type="number" step="5" style={fontSize} onChange={this.update('houseDepositPercentChange')} label="House deposit %" />
         </Row>
 
         <Row>
@@ -231,42 +231,42 @@ class App extends Component {
         </Row>
 
         <Row>        
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('stampDuty')} label="Stamp Duty (optional)" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('stampDuty')} label="Stamp duty (optional)" />
         </Row>
         
         <Row>        
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('solicitorFees')} label="Solicitor Fees" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('solicitorFees')} label="Solicitor fees" />
         </Row>
         </Modal>
 
         <Table className="highlight bordered">        
           <tbody>
           <tr>
-              <td>Land Price</td>
+              <td>Land price</td>
               <td>{landPrice}</td>
             </tr>
             <tr>
-              <td>House Price</td>
+              <td>House price</td>
               <td>{housePrice}</td>
             </tr>
 
             <tr>
-              <td>Stamp Duty</td>
+              <td>Stamp duty</td>
               <td>{stampDuty}</td>
             </tr>
             
             <tr>
-              <td>Transfer Fee</td>
+              <td>Transfer fee</td>
               <td>{transferFee}</td>
             </tr>
             
             <tr>
-              <td>Government Fee</td>
+              <td>Government fee</td>
               <td>{governmentFee}</td>
             </tr>
             
             <tr>
-              <td>Solicitor Fees</td>
+              <td>Solicitor fees</td>
               <td>{solicitorFees}</td>
             </tr>
 
@@ -321,7 +321,7 @@ class App extends Component {
             {depositAmount && <Table className="highlight bordered">
               <tbody>
                 <tr>
-                    <td>Available Savings</td>
+                    <td>Available savings</td>
                     <td>{savings}</td>
                 </tr>
                 
@@ -338,7 +338,7 @@ class App extends Component {
                     <td>{governmentFee + transferFee}</td>
                 </tr>
                 <tr>
-                    <td>Solicitor Fees (-)</td>
+                    <td>Solicitor fees (-)</td>
                     <td>{solicitorFees}</td>
                 </tr>                
                 
@@ -346,9 +346,9 @@ class App extends Component {
                   <div>Property contributions</div>
                 </th>
 
-                {upfrontDepositCalculation.split(' + ').map((dep, index) => 
+                {upfrontDepositCalculation.map(([ratio, dep], index) => 
                   <tr>
-                      <td>{index === 0 ? 'Deposit' : 'Savings'} (+)</td>
+                      <td>{index === 0 ? 'Deposit' : `Savings @${ratio}% loan`} (+)</td>
                       <td>{dep}</td>
                   </tr>
                 )}
@@ -364,14 +364,14 @@ class App extends Component {
             </tr>
             {loanAmount &&
             <tr>
-              <td>Loan Amount ({loanRatio}%)</td>
+              <td>Loan amount ({loanRatio}%)</td>
               <td>{loanAmount}</td>
             </tr>
             }
 
             {lmiAmount && 
             <tr>
-              <td>LMI Amount ({lmiPercent}%)</td>
+              <td>LMI amount ({lmiPercent}%)</td>
               <td>{lmiAmount}</td>
             </tr>
             }
@@ -388,11 +388,11 @@ class App extends Component {
             {loanWithLmi && <Table className="highlight bordered">
               <tbody>
                 <tr>
-                    <td>Loan Amount (+)</td>
+                    <td>Loan amount (+)</td>
                     <td>{loanAmount}</td>
                 </tr>
                 <tr>
-                    <td>LMI Amount (+)</td>
+                    <td>LMI amount (+)</td>
                     <td>{lmiAmount}</td>
                 </tr>
               </tbody>
