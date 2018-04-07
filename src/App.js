@@ -313,7 +313,7 @@ class App extends Component {
               <td style={strong}>
                 <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny">expand_more</i>
                 <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
-                Contributed deposits<br/>
+                Deposits and payments<br/>
               </td>
               <td style={strong}>{(lmiAmount + upfrontDeposits) || 'Unavailable'}</td>
             </tr>
