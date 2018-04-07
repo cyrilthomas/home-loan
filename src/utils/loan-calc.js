@@ -52,14 +52,13 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
     let lvrPercent;
     let finalLoanAmount;
     let leftoverSavings = 0;
-    loanRatio = Math.round((1 - (upfrontDeposits / propertyPrice)) * 100);
     let upfrontDepositCalculation = [[null, null, upfrontDeposits]];
     let first = true;
 
     while (true) {
         const depositAmount = parseInt(savings) - additionalFees;
         depositPercent = Math.round((upfrontDeposits / propertyPrice) * 100);    
-        loanRatio = Math.round((1 - (upfrontDeposits / propertyPrice)) * 100); // equivalent of loan amount / gross property
+        loanRatio = ((1 - (upfrontDeposits / propertyPrice)) * 100).toPrecision(4); // equivalent of loan amount / gross property
     
         for (let j = 0; j < LVR_RANGES.length; j++) {
             const [min, max] = LVR_RANGES[j];
