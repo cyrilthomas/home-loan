@@ -311,9 +311,9 @@ class App extends Component {
               <td style={strong}>
                 <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny">expand_more</i>
                 <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
-                Additional cash in hand<br/>
+                Deposit and payments<br/>
               </td>
-              <td style={strong}>{leftoverSavings || 'Unavailable'}</td>
+              <td style={strong}>{depositAmount || 'Unavailable'}</td>
             </tr>
             <tr ref={(o) => { this.depositTable = o }} style={{ display: 'none' }}>
             {depositAmount && <Table className="highlight bordered">
@@ -331,6 +331,7 @@ class App extends Component {
                     <td>Stamp duty (-)</td>
                     <td>{stampDuty}</td>
                 </tr>
+                
                 <tr>
                     <td>Fees (-)</td>
                     <td>{governmentFee + transferFee}</td>
@@ -338,11 +339,6 @@ class App extends Component {
                 <tr>
                     <td>Solicitor fees (-)</td>
                     <td>{solicitorFees}</td>
-                </tr>                
-
-                <tr>
-                    <td>LMI compensation (-)</td>
-                    <td>{lmiAmount}</td>
                 </tr>
                 
                 <th>
@@ -354,8 +350,13 @@ class App extends Component {
                     <td>{upfrontDeposits}</td>
                 </tr>
 
+                <tr>
+                    <td>LMI compensation</td>
+                    <td>{lmiAmount}</td>
+                </tr>
+
                 <tr style={strong}>
-                    <td>Additional cash</td>
+                    <td>Leftover savings</td>
                     <td>{leftoverSavings}</td>
                 </tr>
               </tbody>
@@ -375,13 +376,6 @@ class App extends Component {
               <td>{lmiAmount}</td>
             </tr>
             }
-            
-            {lvrPercent &&
-            <tr>
-              <td>LVR %</td>
-              <td>{lvrPercent}</td>
-            </tr>
-            }
 
             {loanWithLmi && <tr onClick={() => this.toggleView(this.loanTable, this.loanTablePlus, this.loanTableMinus)}>
               <td style={strong}>
@@ -399,7 +393,7 @@ class App extends Component {
                     <td>{loanAmount}</td>
                 </tr>
                 <tr>
-                    <td>LMI amount (+)</td>
+                    <td>LMI amount (-)</td>
                     <td>{lmiAmount}</td>
                 </tr>
               </tbody>

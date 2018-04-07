@@ -59,8 +59,8 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
     const loanAmount = (propertyPrice - depositAmount);
     console.log('loanAmount', loanAmount);
     const lmiAmount = Math.round(loanAmount * (lmiPercent / 100));
-    const finalDepositAmount = depositAmount - lmiAmount;
-    const loanWithLmi = propertyPrice - finalDepositAmount; // loan amount after upfront lmi payment
+    // const finalDepositAmount = depositAmount - lmiAmount;
+    const loanWithLmi = loanAmount - lmiAmount; // actual loan towards payment without LMI
     // const lvrPercent = Math.round((1 - (depositAmount / loanWithLmi)) * 100);
     const lvrPercent = Math.round((loanWithLmi / propertyPrice) * 100);
     const finalLoanAmount = loanAmount - lmiAmount;
@@ -71,10 +71,12 @@ export default (config, landPrice, housePrice, savings, solicitorFees, landDepos
         upfrontDeposits
     );
 
+
+
     return {
         transferFee: TRANSFER_FEE,
         governmentFee: GOVERNMENT_FEE,
-        depositAmount: finalDepositAmount,
+        depositAmount,
         propertyPrice,
         depositPercent,
         loanRatio, 
