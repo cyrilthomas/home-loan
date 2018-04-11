@@ -41,6 +41,7 @@ class App extends Component {
       landDepositPercent: 0,
       houseDepositPercent: 0
     };
+    // handle form reset
 
     this.state = {};
   }

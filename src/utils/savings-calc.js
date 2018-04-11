@@ -65,8 +65,10 @@ export default (config, landPrice, housePrice, loanAmount, solicitorFees, landDe
     // const finalDepositAmount = depositAmount - lmiAmount;
     const loanWithLmi = loanAmount + lmiAmount; // actual loan 
     // const lvrPercent = Math.round((1 - (depositAmount / loanWithLmi)) * 100);
-    const lvrPercent = Math.round((loanWithLmi / propertyPrice) * 100);
-    const finalLoanAmount = loanWithLmi;
+    const lvrPercent = ((loanWithLmi / propertyPrice) * 100).toPrecision(4);
+    
+    if (lvrPercent > 95) throw new RangeError('LVR too high');
+
     const savings = (
         depositAmount +
         additionalFees
@@ -83,7 +85,7 @@ export default (config, landPrice, housePrice, loanAmount, solicitorFees, landDe
         lmiPercent,
         lmiAmount,
         loanAmount,
-        loanWithLmi: finalLoanAmount,
+        loanWithLmi,
         lvrPercent,
         stampDuty,
         upfrontLandBookingAmount,
