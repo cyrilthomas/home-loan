@@ -3,7 +3,7 @@ import {
   Input, Row, Table, Modal
 } from 'react-materialize';
 import conf from './utils/config';
-import calc from './utils/loan-calc';
+import calc from './utils/savings-calc';
 
 const strong = {
   fontWeight: 800,
@@ -23,7 +23,7 @@ class App extends Component {
     this.configChange = this.configChange.bind(this);
     this.landPriceChange = this.landPriceChange.bind(this);
     this.housePriceChange = this.housePriceChange.bind(this);
-    this.savings = this.savings.bind(this);
+    this.loanAmount = this.loanAmount.bind(this);
     this.stampDuty = this.stampDuty.bind(this);
     this.update = (method) => (event) => {
       this[method](event);
@@ -33,10 +33,11 @@ class App extends Component {
     this.form = {
       config: conf('default'),
       userStampDuty: null,
-      savings: 0,
+      loanAmount: 0,
       landPrice: 0,
       housePrice: 0,
       solicitorFees: 0,
+      depositAmount: null,
       landDepositPercent: 0,
       houseDepositPercent: 0
     };
@@ -92,11 +93,13 @@ class App extends Component {
     }
   }
 
-  savings(event) {
-    const savings = event.target.value;
+  loanAmount(event) {
+    const loanAmount = event.target.value;
 
-    if (savings) {
-      this.form.savings = savings;
+    console.log('Loan amount', loanAmount);
+
+    if (loanAmount) {
+      this.form.loanAmount = loanAmount;
     }
   }
   
@@ -109,7 +112,7 @@ class App extends Component {
   }
 
   calculate() {
-    const { config, landPrice, landDepositPercent, houseDepositPercent, housePrice, savings, userStampDuty, solicitorFees } = this.form;
+    const { config, landPrice, landDepositPercent, houseDepositPercent, housePrice, loanAmount, userStampDuty, solicitorFees } = this.form;
     
     try {
         const {
@@ -122,23 +125,23 @@ class App extends Component {
         loanRatio, 
         lmiPercent,
         lmiAmount,
-        loanAmount,
         loanWithLmi,
         lvrPercent,
         upfrontLandBookingAmount,
         upfrontLandDepositAmount,
         upfrontHouseDepositAmount,
         upfrontDeposits,
-        leftoverSavings
-      } = calc(config, landPrice, housePrice, savings, solicitorFees, landDepositPercent, houseDepositPercent, userStampDuty);
+        savings,
+        additionalCapital
+      } = calc(config, landPrice, housePrice, loanAmount, solicitorFees, landDepositPercent, houseDepositPercent, userStampDuty);
       
       this.setState({
         transferFee, governmentFee, stampDuty,
-        propertyPrice, savings, depositAmount, depositPercent,
+        propertyPrice, depositAmount, depositPercent,
         loanRatio, lmiPercent, lmiAmount,
         loanAmount, loanWithLmi, lvrPercent,
         upfrontLandBookingAmount, upfrontLandDepositAmount, upfrontHouseDepositAmount,
-        upfrontDeposits, leftoverSavings
+        upfrontDeposits, savings, additionalCapital
       });
     } catch (err) {
       console.log('Invalid input', err);
@@ -160,7 +163,7 @@ class App extends Component {
   }
 
   render() {
-    const { landPrice, landDepositPercent, houseDepositPercent, housePrice, savings, solicitorFees, userStampDuty } = this.form;
+    const { landPrice, landDepositPercent, houseDepositPercent, housePrice, loanAmount, solicitorFees, userStampDuty } = this.form;
     
     const {
       propertyPrice,
@@ -172,14 +175,14 @@ class App extends Component {
       loanRatio,
       lmiPercent,
       lmiAmount,
-      loanAmount,
       loanWithLmi,
       lvrPercent,
       upfrontLandBookingAmount,
       upfrontLandDepositAmount,
       upfrontHouseDepositAmount,
       upfrontDeposits,
-      leftoverSavings
+      savings,
+      additionalCapital
     } = this.state;
 
     return (
@@ -225,7 +228,7 @@ class App extends Component {
         </Row>
 
         <Row>
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('savings')} label="Savings" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('loanAmount')} label="Loan amount" />
         </Row>
 
         <Row>        
@@ -274,8 +277,8 @@ class App extends Component {
             </tr>
 
             <tr>
-              <td>Savings</td>
-              <td>{savings}</td>
+              <td>Loan amount</td>
+              <td>{loanAmount}</td>
             </tr>            
             
             <tr style={strong} onClick={() => this.toggleView(this.upfrontDepositTable, this.upfrontDepositTablePlus, this.upfrontDepositTableMinus)}>
@@ -311,18 +314,13 @@ class App extends Component {
               <td style={strong}>
                 <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny">expand_more</i>
                 <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
-                Deposit and payments<br/>
+                Total savings<br/>
               </td>
-              <td style={strong}>{depositAmount || 'Unavailable'}</td>
+              <td style={strong}>{savings || 'Unavailable'}</td>
             </tr>
             <tr ref={(o) => { this.depositTable = o }} style={{ display: 'none' }}>
             {depositAmount && <Table className="highlight bordered">
-              <tbody>
-                <tr>
-                    <td>Available savings</td>
-                    <td>{savings}</td>
-                </tr>
-                
+              <tbody>                
                 <th>
                   <div>Out of hand expenses</div>
                 </th>
@@ -349,26 +347,14 @@ class App extends Component {
                     <td>Upfront deposits</td>
                     <td>{upfrontDeposits}</td>
                 </tr>
-
                 <tr>
-                    <td>LMI compensation</td>
-                    <td>{lmiAmount}</td>
-                </tr>
-
-                <tr style={strong}>
-                    <td>Leftover savings</td>
-                    <td>{leftoverSavings}</td>
+                    <td>Additional capital</td>
+                    <td>{additionalCapital}</td>
                 </tr>
               </tbody>
               </Table>
             }
             </tr>
-            {loanAmount &&
-            <tr>
-              <td>Loan amount ({loanRatio}%)</td>
-              <td>{loanAmount}</td>
-            </tr>
-            }
 
             {lmiAmount && 
             <tr>
@@ -377,29 +363,12 @@ class App extends Component {
             </tr>
             }
 
-            {loanWithLmi && <tr onClick={() => this.toggleView(this.loanTable, this.loanTablePlus, this.loanTableMinus)}>
+            {loanWithLmi && <tr>
               <td style={strong}>
-                <i ref={(r) => this.loanTablePlus = r } className="material-icons tiny">expand_more</i>
-                <i ref={(r) => this.loanTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
                 Final Loan Amount ({lvrPercent}%)</td>
               <td style={strong}>{loanWithLmi || 'Unavailable'}</td>
             </tr>
             }
-            <tr ref={(o) => { this.loanTable = o }} style={{ display: 'none' }}>
-            {loanWithLmi && <Table className="highlight bordered">
-              <tbody>
-                <tr>
-                    <td>Loan amount (+)</td>
-                    <td>{loanAmount}</td>
-                </tr>
-                <tr>
-                    <td>LMI amount (-)</td>
-                    <td>{lmiAmount}</td>
-                </tr>
-              </tbody>
-              </Table>
-            }
-            </tr>
 
 
           </tbody>
