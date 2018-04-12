@@ -432,9 +432,9 @@ class App extends Component {
               <td>
                 <i ref={(r) => this.projectionTablePlus = r } className="material-icons tiny" style={expandables}>expand_more</i>
                 <i ref={(r) => this.projectionTableMinus = r } className="material-icons tiny" style={{display: 'none', ...expandables}}>expand_less</i>
-                Projected loan
+                Lower loan repayment options
               </td>
-              <td></td>
+              <td> - </td>
             </tr>
 
             <tr ref={(o) => { this.projectionTable = o }} style={{ display: 'none' }}>
@@ -442,10 +442,10 @@ class App extends Component {
               {projected && projected.map(([extra, loan, projection], key) =>
                 <tbody key={key}>
                   <th>
-                    <div>Additional ${extra}</div>
+                    <div>Additional savings - ${extra}</div>
                   </th>
                   <tr>
-                    <td>Savings</td>
+                    <td>Total savings</td>
                     <td>{projection.savings}</td>
                   </tr>
                   <tr>
