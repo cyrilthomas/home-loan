@@ -43,9 +43,11 @@ export default (config, landPrice, housePrice, loanAmount, solicitorFees, landDe
 
     console.log('loanRatio', loanRatio);
     let lmiPercent;
+    let lmiPosition;
     for (let j = 0; j < LVR_RANGES.length; j++) {
         const [min, max] = LVR_RANGES[j];
         if (loanRatio >= min && loanRatio <= max) {
+            lmiPosition = j;
             lmiPercent = lmiBracket[j];
             console.log('lmiPercent', lmiPercent);
             break;
@@ -84,6 +86,7 @@ export default (config, landPrice, housePrice, loanAmount, solicitorFees, landDe
         depositPercent,
         loanRatio, 
         lmiPercent,
+        lmiPosition,
         lmiAmount,
         loanAmount,
         loanWithLmi,

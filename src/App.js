@@ -122,8 +122,6 @@ class App extends Component {
   loanAmount(event) {
     const loanAmount = event.target.value;
 
-    console.log('Loan amount', loanAmount);
-
     if (loanAmount) {
       this.form.loanAmount = loanAmount;
     }
@@ -158,8 +156,25 @@ class App extends Component {
         upfrontHouseDepositAmount,
         upfrontDeposits,
         savings,
-        additionalCapital
+        additionalCapital,
+        lmiPosition
       } = calc(config, landPrice, housePrice, loanAmount, solicitorFees, landDepositPercent, houseDepositPercent, userStampDuty);
+
+      const projections = [lmiPosition - 1, lmiPosition - 2, lmiPosition - 3];
+      const projected = projections.map((projection, idx) => {
+        const [first] = config.LVR_RANGES[projection];        
+        const newLoanAmount = Math.round((first + 0.01) / 100 * propertyPrice);        
+        const extraSavings = (loanAmount - newLoanAmount);
+        
+        return [
+          extraSavings, newLoanAmount, calc(
+            config, landPrice, housePrice, newLoanAmount, 
+            solicitorFees, landDepositPercent, 
+            houseDepositPercent, userStampDuty
+          )
+        ];
+      });
+      // const projected = [];
       
       this.setState({
         errMessage: null,
@@ -168,7 +183,7 @@ class App extends Component {
         loanRatio, lmiPercent, lmiAmount,
         loanAmount, loanWithLmi, lvrPercent,
         upfrontLandBookingAmount, upfrontLandDepositAmount, upfrontHouseDepositAmount,
-        upfrontDeposits, savings, additionalCapital
+        upfrontDeposits, savings, additionalCapital, projected
       });
     } catch (err) {
       this.setState({ errMessage: err.message });
@@ -210,7 +225,8 @@ class App extends Component {
       upfrontHouseDepositAmount,
       upfrontDeposits,
       savings,
-      additionalCapital
+      additionalCapital,
+      projected
     } = this.state;
     const savingsStyle = (userSavings && (savings > userSavings)) ? { ...strong, ...redStyle, ...whiteText } : strong;
 
@@ -316,7 +332,7 @@ class App extends Component {
               <td>{propertyPrice}</td>
             </tr>
 
-            <tr>
+            <tr style={strong}>
               <td>Loan amount</td>
               <td>{loanAmount}</td>
             </tr>            
@@ -407,11 +423,47 @@ class App extends Component {
 
             {loanWithLmi ? <tr>
               <td style={strong}>
-                Final Loan Amount ({lvrPercent}%)</td>
+                Final loan Amount ({lvrPercent}%)</td>
               <td style={strong}>{loanWithLmi || 'Unavailable'}</td>
             </tr>
             : null}
 
+            <tr style={strong} onClick={() => this.toggleView(this.projectionTable, this.projectionTablePlus, this.projectionTableMinus)}>
+              <td>
+                <i ref={(r) => this.projectionTablePlus = r } className="material-icons tiny" style={expandables}>expand_more</i>
+                <i ref={(r) => this.projectionTableMinus = r } className="material-icons tiny" style={{display: 'none', ...expandables}}>expand_less</i>
+                Projected loan
+              </td>
+              <td></td>
+            </tr>
+
+            <tr ref={(o) => { this.projectionTable = o }} style={{ display: 'none' }}>
+            <Table className="highlight bordered">              
+              {projected && projected.map(([extra, loan, projection], key) =>
+                <tbody key={key}>
+                  <th>
+                    <div>Additional ${extra}</div>
+                  </th>
+                  <tr>
+                    <td>Savings</td>
+                    <td>{projection.savings}</td>
+                  </tr>
+                  <tr>
+                    <td>Loan</td>
+                    <td>{loan}</td>
+                  </tr>
+                  <tr>
+                    <td>LMI</td>
+                    <td>{projection.lmiAmount}</td>
+                  </tr>
+                  <tr>
+                    <td>Final loan amount ({projection.lvrPercent}%)</td>
+                    <td>{projection.loanWithLmi}</td>
+                  </tr>
+                </tbody>
+              )}
+            </Table>
+            </tr>
 
           </tbody>
         </Table>      
