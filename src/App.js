@@ -11,8 +11,9 @@ const strong = {
 };
 
 const fontSize = { fontSize: '16px' };
-const theme = {backgroundColor: '#1A8CFF'};
+const theme = { backgroundColor: '#1A8CFF' };
 const redStyle = { backgroundColor: '#f04242' };
+const whiteText = { color: 'white' };
 const blueStyle = { backgroundColor: '#241e4e' };
 const greyStyle = { backgroundColor: '#efefef' };
 const floatStyle = { bottom: '35px', right: '24px' };
@@ -34,6 +35,7 @@ class App extends Component {
     this.housePriceChange = this.housePriceChange.bind(this);
     this.loanAmount = this.loanAmount.bind(this);
     this.stampDuty = this.stampDuty.bind(this);
+    this.userSavingsChange = this.userSavingsChange.bind(this);
     this.update = (method) => (event) => {
       this[method](event);
       this.calculate();
@@ -47,6 +49,7 @@ class App extends Component {
     this.form = {
       bank,
       config: conf(bank),
+      userSavings: 0,
       userStampDuty: null,
       loanAmount: 0,
       landPrice: 0,
@@ -56,6 +59,14 @@ class App extends Component {
       landDepositPercent: 0,
       houseDepositPercent: 0
     };
+  }
+
+  userSavingsChange(event) {
+    const userSavings = event.target.value;
+
+    if (userSavings) {
+      this.form.userSavings = parseInt(userSavings);
+    }
   }
 
   configChange(event) {
@@ -176,8 +187,8 @@ class App extends Component {
     return;
   }
 
-  render() {
-    const { bank, landPrice, landDepositPercent, houseDepositPercent, housePrice, loanAmount, solicitorFees, userStampDuty } = this.form;
+  render() {    
+    const { bank, userSavings, landPrice, landDepositPercent, houseDepositPercent, housePrice, loanAmount, solicitorFees, userStampDuty } = this.form;    
     
     const {
       errMessage,
@@ -199,6 +210,7 @@ class App extends Component {
       savings,
       additionalCapital
     } = this.state;
+    const savingsStyle = (savings > userSavings) ? { ...strong, ...redStyle, ...whiteText } : strong;
 
     return (
       <div className="App">
@@ -252,12 +264,18 @@ class App extends Component {
         </Row>
 
         <Row>        
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('stampDuty')} label="Stamp duty (optional)" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('solicitorFees')} label="Solicitor fees" />
+        </Row>
+
+        <Row>        
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('userSavingsChange')} label="Your savings (optional)" />
         </Row>
         
         <Row>        
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('solicitorFees')} label="Solicitor fees" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('stampDuty')} label="Stamp duty (optional)" />
         </Row>
+        
+        
         </Modal>
 
         <Table className="highlight bordered">        
@@ -331,12 +349,14 @@ class App extends Component {
             </tr>            
 
             <tr onClick={() => this.toggleView(this.depositTable, this.depositTablePlus, this.depositTableMinus)}>
-              <td style={strong}>
+              <td style={savingsStyle}>
                 <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny">expand_more</i>
                 <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
                 Total savings<br/>
               </td>
-              <td style={strong}>{savings || 'Unavailable'}</td>
+              <td style={savingsStyle}>
+                {savings || 'Unavailable'}
+              </td>
             </tr>
             <tr ref={(o) => { this.depositTable = o }} style={{ display: 'none' }}>
             {depositAmount ? <Table className="highlight bordered">
