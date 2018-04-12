@@ -10,13 +10,15 @@ const strong = {
   // color: 'white'
 };
 
+const greyColor = '#828181';
 const fontSize = { fontSize: '16px' };
 const theme = { backgroundColor: '#1A8CFF' };
 const redStyle = { backgroundColor: '#f04242' };
 const whiteText = { color: 'white' };
 const blueStyle = { backgroundColor: '#241e4e' };
-const greyStyle = { backgroundColor: '#efefef' };
+const greyStyle = { backgroundColor: greyColor };
 const floatStyle = { bottom: '35px', right: '24px' };
+const expandables = { position: 'absolute', marginLeft: '-20px', color: greyColor };
 const errorStyle = {
   height: '50px', 
   color: 'white', 
@@ -49,7 +51,7 @@ class App extends Component {
     this.form = {
       bank,
       config: conf(bank),
-      userSavings: 0,
+      userSavings: null,
       userStampDuty: null,
       loanAmount: 0,
       landPrice: 0,
@@ -210,7 +212,7 @@ class App extends Component {
       savings,
       additionalCapital
     } = this.state;
-    const savingsStyle = (savings > userSavings) ? { ...strong, ...redStyle, ...whiteText } : strong;
+    const savingsStyle = (userSavings && (savings > userSavings)) ? { ...strong, ...redStyle, ...whiteText } : strong;
 
     return (
       <div className="App">
@@ -220,7 +222,7 @@ class App extends Component {
           </div>
         </nav>
                 
-        <div className="container" style={{ padding: '0 2%', marginTop: '1%', marginBottom: '1%', backgroundColor: 'white', color: '#828181' }}>        
+        <div className="container" style={{ padding: '0 2%', marginTop: '1%', marginBottom: '1%', backgroundColor: 'white', color: greyColor }}>
         <br/>
         
         {errMessage && <div className="red accent-3" style={errorStyle}>
@@ -321,8 +323,8 @@ class App extends Component {
             
             <tr style={strong} onClick={() => this.toggleView(this.upfrontDepositTable, this.upfrontDepositTablePlus, this.upfrontDepositTableMinus)}>
               <td>
-                <i ref={(r) => this.upfrontDepositTablePlus = r } className="material-icons tiny">expand_more</i>
-                <i ref={(r) => this.upfrontDepositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
+                <i ref={(r) => this.upfrontDepositTablePlus = r } className="material-icons tiny" style={expandables}>expand_more</i>
+                <i ref={(r) => this.upfrontDepositTableMinus = r } className="material-icons tiny" style={{display: 'none', ...expandables}}>expand_less</i>
                 Land upfront deposit amount</td>
               <td>{(upfrontLandBookingAmount || 0) + (upfrontLandDepositAmount || 0)}</td>
             </tr>
@@ -348,13 +350,13 @@ class App extends Component {
               <td>{upfrontHouseDepositAmount}</td>
             </tr>            
 
-            <tr onClick={() => this.toggleView(this.depositTable, this.depositTablePlus, this.depositTableMinus)}>
-              <td style={savingsStyle}>
-                <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny">expand_more</i>
-                <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none'}}>expand_less</i>
+            <tr style={savingsStyle} onClick={() => this.toggleView(this.depositTable, this.depositTablePlus, this.depositTableMinus)}>
+              <td>
+                <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny" style={expandables}>expand_more</i>
+                <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none', ...expandables}}>expand_less</i>
                 Total savings<br/>
               </td>
-              <td style={savingsStyle}>
+              <td>
                 {savings || 'Unavailable'}
               </td>
             </tr>
