@@ -19,6 +19,7 @@ const blueStyle = { backgroundColor: '#241e4e' };
 const greyStyle = { backgroundColor: greyColor };
 const floatStyle = { bottom: '35px', right: '24px' };
 const expandables = { position: 'absolute', marginLeft: '-20px', color: greyColor };
+const redClass = "red accent-3 white-text";
 const errorStyle = {
   height: '50px', 
   color: 'white', 
@@ -185,8 +186,10 @@ class App extends Component {
         upfrontLandBookingAmount, upfrontLandDepositAmount, upfrontHouseDepositAmount,
         upfrontDeposits, savings, additionalCapital, projected
       });
-    } catch (err) {
+    } catch (err) {      
       this.setState({ errMessage: err.message });
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
     }
   }
 
@@ -228,7 +231,7 @@ class App extends Component {
       additionalCapital,
       projected
     } = this.state;
-    const savingsStyle = (userSavings && (savings > userSavings)) ? { ...strong, ...redStyle, ...whiteText } : strong;
+    const savingsStyleProps = (userSavings && (savings > userSavings)) ? { style: strong, className: redClass } : { style: strong };
 
     return (
       <div className="App">
@@ -241,7 +244,7 @@ class App extends Component {
         <div className="container" style={{ padding: '0 2%', marginTop: '1%', marginBottom: '1%', backgroundColor: 'white', color: greyColor }}>
         <br/>
         
-        {errMessage && <div className="red accent-3" style={errorStyle}>
+        {errMessage && <div className={redClass} style={errorStyle}>
             <p>Ooops! {errMessage}</p>
           </div>
         }
@@ -366,7 +369,7 @@ class App extends Component {
               <td>{upfrontHouseDepositAmount}</td>
             </tr>            
 
-            <tr style={savingsStyle} onClick={() => this.toggleView(this.depositTable, this.depositTablePlus, this.depositTableMinus)}>
+            <tr {...savingsStyleProps} onClick={() => this.toggleView(this.depositTable, this.depositTablePlus, this.depositTableMinus)}>
               <td>
                 <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny" style={expandables}>expand_more</i>
                 <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none', ...expandables}}>expand_less</i>
