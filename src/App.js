@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { 
-  Input, Row, Table, Modal
+  Input, Row, Table, Modal, Toast
 } from 'react-materialize';
 import conf from './utils/config';
 import calc from './utils/savings-calc';
@@ -16,10 +16,19 @@ const redStyle = { backgroundColor: '#f04242' };
 const blueStyle = { backgroundColor: '#241e4e' };
 const greyStyle = { backgroundColor: '#efefef' };
 const floatStyle = { bottom: '35px', right: '24px' };
+const errorStyle = {
+  height: '50px', 
+  color: 'white', 
+  textAlign: 'center', 
+  verticalAlign: 'middle', 
+  lineHeight: '50px'
+};
 
 class App extends Component {
   constructor(props) {
     super(props);
+    const bank = 'default';    
+    
     this.configChange = this.configChange.bind(this);
     this.landPriceChange = this.landPriceChange.bind(this);
     this.housePriceChange = this.housePriceChange.bind(this);
@@ -29,9 +38,15 @@ class App extends Component {
       this[method](event);
       this.calculate();
     };
+    this.reset();
 
+    this.state = {};
+  }
+
+  reset(bank = 'default') {
     this.form = {
-      config: conf('default'),
+      bank,
+      config: conf(bank),
       userStampDuty: null,
       loanAmount: 0,
       landPrice: 0,
@@ -41,9 +56,6 @@ class App extends Component {
       landDepositPercent: 0,
       houseDepositPercent: 0
     };
-    // handle form reset
-
-    this.state = {};
   }
 
   configChange(event) {
@@ -116,7 +128,7 @@ class App extends Component {
     const { config, landPrice, landDepositPercent, houseDepositPercent, housePrice, loanAmount, userStampDuty, solicitorFees } = this.form;
     
     try {
-        const {
+      const {
         transferFee,
         governmentFee,
         stampDuty,
@@ -137,6 +149,7 @@ class App extends Component {
       } = calc(config, landPrice, housePrice, loanAmount, solicitorFees, landDepositPercent, houseDepositPercent, userStampDuty);
       
       this.setState({
+        errMessage: null,
         transferFee, governmentFee, stampDuty,
         propertyPrice, depositAmount, depositPercent,
         loanRatio, lmiPercent, lmiAmount,
@@ -145,7 +158,7 @@ class App extends Component {
         upfrontDeposits, savings, additionalCapital
       });
     } catch (err) {
-      console.log('Invalid input', err);
+      this.setState({ errMessage: err.message });
     }
   }
 
@@ -164,9 +177,10 @@ class App extends Component {
   }
 
   render() {
-    const { landPrice, landDepositPercent, houseDepositPercent, housePrice, loanAmount, solicitorFees, userStampDuty } = this.form;
+    const { bank, landPrice, landDepositPercent, houseDepositPercent, housePrice, loanAmount, solicitorFees, userStampDuty } = this.form;
     
     const {
+      errMessage,
       propertyPrice,
       stampDuty,
       transferFee,
@@ -193,10 +207,15 @@ class App extends Component {
             <a className="brand-logo center">LOAN PLANNER</a>
           </div>
         </nav>
-        
-        <div className="container" style={{ padding: '0 2%', marginTop: '1%', marginBottom: '1%', backgroundColor: 'white', color: '#828181' }}>
-        
+                
+        <div className="container" style={{ padding: '0 2%', marginTop: '1%', marginBottom: '1%', backgroundColor: 'white', color: '#828181' }}>        
         <br/>
+        
+        {errMessage && <div className="red accent-3" style={errorStyle}>
+            <p>Ooops! {errMessage}</p>
+          </div>
+        }
+
         <Modal
           header='Enter your details'
           bottomSheet
@@ -206,7 +225,7 @@ class App extends Component {
             </div>
           }>
           <Row>
-          <Input s={3} type='select' label="Pick LMI rate" defaultValue="default" onChange={this.update('configChange')}>
+          <Input s={3} type='select' label="Pick LMI rate" defaultValue={bank} onChange={this.update('configChange')}>
             <option value='default'>Default</option>
             <option value='westpac'>Westpac</option>
           </Input>
@@ -320,7 +339,7 @@ class App extends Component {
               <td style={strong}>{savings || 'Unavailable'}</td>
             </tr>
             <tr ref={(o) => { this.depositTable = o }} style={{ display: 'none' }}>
-            {depositAmount && <Table className="highlight bordered">
+            {depositAmount ? <Table className="highlight bordered">
               <tbody>                
                 <th>
                   <div>Out of hand expenses</div>
@@ -354,22 +373,22 @@ class App extends Component {
                 </tr>
               </tbody>
               </Table>
-            }
+            : null}
             </tr>
 
-            {lmiAmount && 
+            {lmiAmount ? 
             <tr>
               <td>LMI amount ({lmiPercent}%)</td>
               <td>{lmiAmount}</td>
             </tr>
-            }
+            : null}
 
-            {loanWithLmi && <tr>
+            {loanWithLmi ? <tr>
               <td style={strong}>
                 Final Loan Amount ({lvrPercent}%)</td>
               <td style={strong}>{loanWithLmi || 'Unavailable'}</td>
             </tr>
-            }
+            : null}
 
 
           </tbody>

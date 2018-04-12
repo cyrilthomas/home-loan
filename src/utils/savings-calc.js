@@ -27,7 +27,7 @@ export default (config, landPrice, housePrice, loanAmount, solicitorFees, landDe
         }
     }
 
-    if (!found) throw new RangeError('Invalid range');
+    if (!found) throw new Error('Invalid range');
 
     lmiBracket = lmiBracket || [];
     const propertyDeposit = (
@@ -67,7 +67,8 @@ export default (config, landPrice, housePrice, loanAmount, solicitorFees, landDe
     // const lvrPercent = Math.round((1 - (depositAmount / loanWithLmi)) * 100);
     const lvrPercent = ((loanWithLmi / propertyPrice) * 100).toPrecision(4);
     
-    if (lvrPercent > 95) throw new RangeError('LVR too high');
+    if (lvrPercent > 95) throw new Error('LVR is greater than 95%');
+    if (!loanWithLmi) throw new Error('Please check your preferences');
 
     const savings = (
         depositAmount +
