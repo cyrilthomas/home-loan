@@ -187,9 +187,7 @@ class App extends Component {
         upfrontDeposits, savings, additionalCapital, projected
       });
     } catch (err) {      
-      this.setState({ errMessage: err.message });
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
+      this.setState({ errMessage: err.message });      
     }
   }
 
@@ -209,7 +207,7 @@ class App extends Component {
 
   render() {    
     const { bank, userSavings, landPrice, landDepositPercent, houseDepositPercent, housePrice, loanAmount, solicitorFees, userStampDuty } = this.form;    
-    
+
     const {
       errMessage,
       propertyPrice,
@@ -231,6 +229,13 @@ class App extends Component {
       additionalCapital,
       projected
     } = this.state;
+    
+    const onComplete = () => {
+      if (!errMessage) return;
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+    
     const savingsStyleProps = (userSavings && (savings > userSavings)) ? { style: strong, className: redClass } : { style: strong };
 
     return (
@@ -250,8 +255,10 @@ class App extends Component {
         }
 
         <Modal
-          header='Enter your details'
+          header="Enter your details"
           bottomSheet
+          open="true"
+          modalOptions={{ complete: onComplete }}
           trigger={
             <div className="fixed-action-btn" style={floatStyle}>
               <a className="right absolute btn-floating btn-large waves-effect waves-light" style={theme}><i className="material-icons tiny">tune</i></a>
