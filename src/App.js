@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { 
   Input, Row, Table, Modal
 } from 'react-materialize';
+import './App.css';
 import conf from './utils/config';
 import calc from './utils/savings-calc';
+
 
 const strong = {
   fontWeight: 800
@@ -56,8 +58,8 @@ class App extends Component {
       housePrice: 0,
       solicitorFees: 0,
       depositAmount: null,
-      landDepositPercent: 0,
-      houseDepositPercent: 0
+      landDepositPercent: 5,
+      houseDepositPercent: 5
     };
   }
 
@@ -270,19 +272,11 @@ class App extends Component {
       
         <Row>
           <Input type="number" step="1000" style={fontSize} onChange={this.update('landPriceChange')} label="Land price" />
-        </Row>
-
-        <Row>
-          <Input type="number" step="5" style={fontSize} onChange={this.update('landDepositPercentChange')} label="Land deposit %" />
-        </Row>
+        </Row>        
                 
         <Row>
           <Input type="number" step="1000" style={fontSize} onChange={this.update('housePriceChange')} label="House Price" />
-        </Row>
-
-        <Row>
-          <Input type="number" step="5" style={fontSize} onChange={this.update('houseDepositPercentChange')} label="House deposit %" />
-        </Row>
+        </Row>        
 
         <Row>
           <Input type="number" step="1000" style={fontSize} onChange={this.update('loanAmount')} label="Loan amount" />
@@ -296,6 +290,14 @@ class App extends Component {
           <Input type="number" step="1000" style={fontSize} onChange={this.update('userSavingsChange')} label="Your savings (optional)" />
         </Row>
         
+        <Row>
+          <Input type="number" step="5" style={fontSize} onChange={this.update('landDepositPercentChange')} label="Land deposit % (optional)" />
+        </Row>
+
+        <Row>
+          <Input type="number" step="5" style={fontSize} onChange={this.update('houseDepositPercentChange')} label="House deposit % (optional)" />
+        </Row>
+
         <Row>        
           <Input type="number" step="1000" style={fontSize} onChange={this.update('stampDuty')} label="Stamp duty (optional)" />
         </Row>
@@ -307,31 +309,26 @@ class App extends Component {
           <tbody>
           <tr>
               <td>Land price</td>
-              <td>{landPrice}</td>
+              <td>{(landPrice || '-')}</td>
             </tr>
             <tr>
               <td>House price</td>
-              <td>{housePrice}</td>
+              <td>{(housePrice || '-')}</td>
             </tr>
 
             <tr>
               <td>Stamp duty</td>
-              <td>{stampDuty}</td>
+              <td>{(stampDuty || '-')}</td>
             </tr>
             
             <tr>
-              <td>Transfer fee</td>
-              <td>{transferFee}</td>
-            </tr>
-            
-            <tr>
-              <td>Government fee</td>
-              <td>{governmentFee}</td>
-            </tr>
+              <td>Goverment and transfer fees</td>
+              <td>{((transferFee || 0) + (governmentFee || 0)) || '-'}</td>
+            </tr>          
             
             <tr>
               <td>Solicitor fees</td>
-              <td>{solicitorFees}</td>
+              <td>{(solicitorFees || '-')}</td>
             </tr>
 
             <tr>
@@ -339,48 +336,30 @@ class App extends Component {
               <td>{propertyPrice}</td>
             </tr>
 
-            <tr style={strong}>
-              <td>Loan amount {loanRatio && `(${loanRatio}%)`}</td>
-              <td>{loanAmount}</td>
-            </tr>            
-            
-            <tr style={strong} onClick={() => this.toggleView(this.upfrontDepositTable, this.upfrontDepositTablePlus, this.upfrontDepositTableMinus)}>
+            <tr>
               <td>
-                <i ref={(r) => this.upfrontDepositTablePlus = r } className="material-icons tiny" style={expandables}>expand_more</i>
-                <i ref={(r) => this.upfrontDepositTableMinus = r } className="material-icons tiny" style={{display: 'none', ...expandables}}>expand_less</i>
-                Land upfront deposit amount</td>
-              <td>{(upfrontLandBookingAmount || 0) + (upfrontLandDepositAmount || 0)}</td>
-            </tr>
-
-            <tr ref={(o) => { this.upfrontDepositTable = o }} style={{ display: 'none' }}>
-            {upfrontLandDepositAmount && <Table className="highlight bordered">
-            <tbody>
-                <tr>
-                    <td>0.25% (-)</td>
-                    <td>{upfrontLandBookingAmount}</td>
-                </tr>
-                <tr>
-                    <td>{parseInt(landDepositPercent) - 0.25}% (-)</td>
-                    <td>{upfrontLandDepositAmount}</td>
-                </tr>
-              </tbody>
-            </Table>
-            }
+                Land upfront deposit amount ({parseInt(landDepositPercent)}%)</td>
+              <td>{((upfrontLandBookingAmount || 0) + (upfrontLandDepositAmount || 0)) || null}</td>
             </tr>
 
             <tr>
-              <td>House upfront deposit amount</td>
-              <td>{upfrontHouseDepositAmount}</td>
+              <td>House upfront deposit amount ({parseInt(houseDepositPercent)}%)</td>
+              <td>{(upfrontHouseDepositAmount || '-')}</td>
+            </tr>
+
+            <tr style={strong}>
+              <td>Loan amount {loanRatio && `(${loanRatio}%)`}</td>
+              <td>{(loanAmount || '-')}</td>
             </tr>            
 
             <tr {...savingsStyleProps} onClick={() => this.toggleView(this.depositTable, this.depositTablePlus, this.depositTableMinus)}>
               <td>
                 <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny" style={expandables}>expand_more</i>
                 <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none', ...expandables}}>expand_less</i>
-                Total savings<br/>
+                Total savings required<br/>
               </td>
               <td>
-                {savings || 'Unavailable'}
+                {savings || '-'}
               </td>
             </tr>
             <tr ref={(o) => { this.depositTable = o }} style={{ display: 'none' }}>
@@ -413,7 +392,7 @@ class App extends Component {
                     <td>{upfrontDeposits}</td>
                 </tr>
                 <tr>
-                    <td>Additional capital</td>
+                    <td>Additional capital in hand</td>
                     <td>{additionalCapital}</td>
                 </tr>
               </tbody>
@@ -439,7 +418,7 @@ class App extends Component {
               <td>
                 <i ref={(r) => this.projectionTablePlus = r } className="material-icons tiny" style={expandables}>expand_more</i>
                 <i ref={(r) => this.projectionTableMinus = r } className="material-icons tiny" style={{display: 'none', ...expandables}}>expand_less</i>
-                Lower loan repayment options
+                Reduced loan options
               </td>
               <td> - </td>
             </tr>
@@ -460,7 +439,7 @@ class App extends Component {
                     <td>{loan}</td>
                   </tr>
                   <tr>
-                    <td>LMI</td>
+                    <td>LMI amount ({projection.lmiPercent}%)</td>
                     <td>{projection.lmiAmount}</td>
                   </tr>
                   <tr>
@@ -471,7 +450,6 @@ class App extends Component {
               )}
             </Table>
             </tr>
-
           </tbody>
         </Table>      
         </div>
