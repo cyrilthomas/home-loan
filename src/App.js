@@ -6,8 +6,7 @@ import conf from './utils/config';
 import calc from './utils/savings-calc';
 
 const strong = {
-  fontWeight: 800,
-  // color: 'white'
+  fontWeight: 800
 };
 
 const greyColor = '#828181';
@@ -341,7 +340,7 @@ class App extends Component {
             </tr>
 
             <tr style={strong}>
-              <td>Loan amount ({loanRatio}%)</td>
+              <td>Loan amount {loanRatio && `(${loanRatio}%)`}</td>
               <td>{loanAmount}</td>
             </tr>            
             
