@@ -435,7 +435,7 @@ class App extends Component {
                     <td>{projection.savings}</td>
                   </tr>
                   <tr>
-                    <td>Loan</td>
+                    <td>Loan amount</td>
                     <td>{loan}</td>
                   </tr>
                   <tr>
