@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { 
-  Input, Row, Table, Modal, Toast
+  Input, Row, Table, Modal
 } from 'react-materialize';
 import conf from './utils/config';
 import calc from './utils/savings-calc';
@@ -13,10 +13,10 @@ const strong = {
 const greyColor = '#828181';
 const fontSize = { fontSize: '16px' };
 const theme = { backgroundColor: '#1A8CFF' };
-const redStyle = { backgroundColor: '#f04242' };
-const whiteText = { color: 'white' };
-const blueStyle = { backgroundColor: '#241e4e' };
-const greyStyle = { backgroundColor: greyColor };
+// const redStyle = { backgroundColor: '#f04242' };
+// const whiteText = { color: 'white' };
+// const blueStyle = { backgroundColor: '#241e4e' };
+// const greyStyle = { backgroundColor: greyColor };
 const floatStyle = { bottom: '35px', right: '24px' };
 const expandables = { position: 'absolute', marginLeft: '-20px', color: greyColor };
 const redClass = "red accent-3 white-text";
@@ -30,9 +30,7 @@ const errorStyle = {
 
 class App extends Component {
   constructor(props) {
-    super(props);
-    const bank = 'default';    
-    
+    super(props);    
     this.configChange = this.configChange.bind(this);
     this.landPriceChange = this.landPriceChange.bind(this);
     this.housePriceChange = this.housePriceChange.bind(this);
@@ -343,7 +341,7 @@ class App extends Component {
             </tr>
 
             <tr style={strong}>
-              <td>Loan amount</td>
+              <td>Loan amount ({loanRatio}%)</td>
               <td>{loanAmount}</td>
             </tr>            
             
@@ -484,3 +482,5 @@ class App extends Component {
 }
 
 export default App;
+
+/*eslint radix: ["error", "as-needed"]*/

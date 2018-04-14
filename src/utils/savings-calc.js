@@ -1,4 +1,3 @@
-
 const TRANSFER_FEE = 139;
 const GOVERNMENT_FEE = 139;
 
@@ -100,3 +99,5 @@ export default (config, landPrice, housePrice, loanAmount, solicitorFees, landDe
         additionalCapital
     };
 };
+
+/*eslint radix: ["error", "as-needed"]*/
