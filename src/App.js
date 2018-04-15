@@ -19,7 +19,7 @@ const theme = { backgroundColor: '#1A8CFF' };
 // const blueStyle = { backgroundColor: '#241e4e' };
 // const greyStyle = { backgroundColor: greyColor };
 const floatStyle = { bottom: '35px', right: '24px' };
-const expandables = { position: 'absolute', marginLeft: '-15px', color: greyColor };
+const expandables = { position: 'absolute', marginTop: '4px', left: '50%', color: greyColor };
 const redClass = "red accent-3 white-text";
 const errorStyle = {
   height: '50px', 
