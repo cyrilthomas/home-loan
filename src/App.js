@@ -271,35 +271,35 @@ class App extends Component {
         </Row>
       
         <Row>
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('landPriceChange')} label="Land price" />
+          <Input s={3} type="number" step="1000" style={fontSize} onChange={this.update('landPriceChange')} label="Land price" />
         </Row>        
                 
         <Row>
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('housePriceChange')} label="House Price" />
+          <Input s={3} type="number" step="1000" style={fontSize} onChange={this.update('housePriceChange')} label="House Price" />
         </Row>        
 
         <Row>
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('loanAmount')} label="Loan amount" />
+          <Input s={3} type="number" step="1000" style={fontSize} onChange={this.update('loanAmount')} label="Loan amount" />
         </Row>
 
         <Row>        
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('solicitorFees')} label="Solicitor fees" />
+          <Input s={3} type="number" step="1000" style={fontSize} onChange={this.update('solicitorFees')} label="Solicitor fees" />
         </Row>
 
         <Row>        
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('userSavingsChange')} label="Your savings (optional)" />
+          <Input s={3} type="number" step="1000" style={fontSize} onChange={this.update('userSavingsChange')} label="Your savings (optional)" />
         </Row>
         
         <Row>
-          <Input type="number" step="5" style={fontSize} onChange={this.update('landDepositPercentChange')} label="Land deposit % (optional)" />
+          <Input s={3} type="number" step="5" style={fontSize} onChange={this.update('landDepositPercentChange')} label="Land deposit % (optional)" />
         </Row>
 
         <Row>
-          <Input type="number" step="5" style={fontSize} onChange={this.update('houseDepositPercentChange')} label="House deposit % (optional)" />
+          <Input s={3} type="number" step="5" style={fontSize} onChange={this.update('houseDepositPercentChange')} label="House deposit % (optional)" />
         </Row>
 
         <Row>        
-          <Input type="number" step="1000" style={fontSize} onChange={this.update('stampDuty')} label="Stamp duty (optional)" />
+          <Input s={3} type="number" step="1000" style={fontSize} onChange={this.update('stampDuty')} label="Stamp duty (optional)" />
         </Row>
         
         
@@ -356,7 +356,7 @@ class App extends Component {
               <td>
                 <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny" style={expandables}>expand_more</i>
                 <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none', ...expandables}}>expand_less</i>
-                Total savings required<br/>
+                Total savings<br/>
               </td>
               <td>
                 {savings || '-'}
@@ -418,7 +418,7 @@ class App extends Component {
               <td>
                 <i ref={(r) => this.projectionTablePlus = r } className="material-icons tiny" style={expandables}>expand_more</i>
                 <i ref={(r) => this.projectionTableMinus = r } className="material-icons tiny" style={{display: 'none', ...expandables}}>expand_less</i>
-                Reduced loan options
+                Reduced LMI options
               </td>
               <td> - </td>
             </tr>
