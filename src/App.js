@@ -264,42 +264,42 @@ class App extends Component {
             </div>
           }>
           <Row>
-          <Input s={3} type='select' label="Pick LMI rate" defaultValue={bank} onChange={this.update('configChange')}>
+          <Input type='select' label="Pick LMI rate" defaultValue={bank} onChange={this.update('configChange')}>
             <option value='default'>Default</option>
             <option value='westpac'>Westpac</option>
           </Input>
         </Row>
       
         <Row>
-          <Input s={3} type="number" step="1000" style={fontSize} onChange={this.update('landPriceChange')} label="Land price" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('landPriceChange')} label="Land price" />
         </Row>        
                 
         <Row>
-          <Input s={3} type="number" step="1000" style={fontSize} onChange={this.update('housePriceChange')} label="House Price" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('housePriceChange')} label="House Price" />
         </Row>        
 
         <Row>
-          <Input s={3} type="number" step="1000" style={fontSize} onChange={this.update('loanAmount')} label="Loan amount" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('loanAmount')} label="Loan amount" />
         </Row>
 
         <Row>        
-          <Input s={3} type="number" step="1000" style={fontSize} onChange={this.update('solicitorFees')} label="Solicitor fees" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('solicitorFees')} label="Solicitor fees" />
         </Row>
 
         <Row>        
-          <Input s={3} type="number" step="1000" style={fontSize} onChange={this.update('userSavingsChange')} label="Your savings (optional)" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('userSavingsChange')} label="Your savings (optional)" />
         </Row>
         
         <Row>
-          <Input s={3} type="number" step="5" style={fontSize} onChange={this.update('landDepositPercentChange')} label="Land deposit % (optional)" />
+          <Input type="number" step="5" style={fontSize} onChange={this.update('landDepositPercentChange')} label="Land deposit % (optional)" />
         </Row>
 
         <Row>
-          <Input s={3} type="number" step="5" style={fontSize} onChange={this.update('houseDepositPercentChange')} label="House deposit % (optional)" />
+          <Input type="number" step="5" style={fontSize} onChange={this.update('houseDepositPercentChange')} label="House deposit % (optional)" />
         </Row>
 
         <Row>        
-          <Input s={3} type="number" step="1000" style={fontSize} onChange={this.update('stampDuty')} label="Stamp duty (optional)" />
+          <Input type="number" step="1000" style={fontSize} onChange={this.update('stampDuty')} label="Stamp duty (optional)" />
         </Row>
         
         
