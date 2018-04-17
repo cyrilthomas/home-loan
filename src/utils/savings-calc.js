@@ -7,7 +7,7 @@ export default (config, landPrice, housePrice, loanAmount, solicitorFees, landDe
     let lmiBracket;
     let found = false;
     const propertyPrice = parseInt(landPrice) + parseInt(housePrice);    
-    const stampDuty =  (userStampDuty !== null) ? parseInt(userStampDuty) : Math.round((((parseInt(landPrice) - 300001) * 4.5)/100)  + 8990);
+    const stampDuty =  (userStampDuty !== null) ? parseInt(userStampDuty) : landPrice && Math.round((((parseInt(landPrice) - 300001) * 4.5)/100)  + 8990);
     const additionalFees = parseInt(stampDuty) + TRANSFER_FEE + GOVERNMENT_FEE + parseInt(solicitorFees);
         
     const upfrontLandBookingAmount = (0.25 / 100) * parseInt(landPrice);
