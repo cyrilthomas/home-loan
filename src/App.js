@@ -162,8 +162,8 @@ class App extends Component {
 
       const projections = [lmiPosition - 1, lmiPosition - 2, lmiPosition - 3];
       const projected = projections.map((projection, idx) => {
-        const [first] = config.LVR_RANGES[projection];        
-        const newLoanAmount = Math.round((first + 0.01) / 100 * propertyPrice);        
+        const [, second] = config.LVR_RANGES[projection];
+        const newLoanAmount = Math.round((second - 0.01) / 100 * propertyPrice);
         const extraSavings = (loanAmount - newLoanAmount);
         
         return [
