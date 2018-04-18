@@ -356,7 +356,7 @@ class App extends Component {
               <td>
                 <i ref={(r) => this.depositTablePlus = r } className="material-icons tiny" style={expandables}>expand_more</i>
                 <i ref={(r) => this.depositTableMinus = r } className="material-icons tiny" style={{display: 'none', ...expandables}}>expand_less</i>
-                Total savings<br/>
+                Total savings (incl. deposits)<br/>
               </td>
               <td>
                 {savings || '-'}
@@ -375,12 +375,8 @@ class App extends Component {
                 </tr>
                 
                 <tr>
-                    <td>Fees (-)</td>
-                    <td>{governmentFee + transferFee}</td>
-                </tr>
-                <tr>
-                    <td>Solicitor fees (-)</td>
-                    <td>{solicitorFees}</td>
+                    <td>Solicitor charges and fees (-)</td>
+                    <td>{parseInt(solicitorFees) + parseInt(governmentFee) + parseInt(transferFee)}</td>
                 </tr>
                 
                 <th>
@@ -395,9 +391,15 @@ class App extends Component {
                     <td>Additional capital in hand</td>
                     <td>{additionalCapital}</td>
                 </tr>
+
               </tbody>
               </Table>
             : null}
+            </tr>
+
+            <tr style={strong}>
+              <td>Savings available after deposit payment</td>
+              <td>{(savings && (savings - upfrontDeposits)) || '-'}</td>
             </tr>
 
             {lmiAmount ? 
