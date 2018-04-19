@@ -2,7 +2,7 @@
   "name": "home-loan",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://cyrilthomas.github.io/home-loan",
+  "homepage": "https://cyrilthomas.github.io/home-loan-iteration",
   "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
