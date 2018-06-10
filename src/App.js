@@ -186,7 +186,8 @@ class App extends Component {
         upfrontDeposits, savings, additionalCapital, projected
       });
     } catch (err) {      
-      this.setState({ errMessage: err.message });      
+      console.log(err.message);
+      this.setState({ errMessage: 'Invalid input.' });
     }
   }
 
